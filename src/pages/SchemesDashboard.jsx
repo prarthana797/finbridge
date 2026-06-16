@@ -40,29 +40,10 @@ export default function SchemesDashboard() {
 
 
 
-<p className="text-sm text-theme-muted mt-3 relative z-10">
-
-  {c.desc}
-
-</p>
 
 
 
-<ul className="mt-4 space-y-2 text-sm text-theme-secondary relative z-10">
 
-  {c.schemes.slice(0, 3).map((scheme) => (
-
-    <li key={scheme.id} className="flex items-center gap-2">
-
-      <span className="w-1.5 h-1.5 rounded-full bg-theme-brand"></span>
-
-      {scheme.name}
-
-    </li>
-
-  ))}
-
-</ul>
 
             <div className="absolute top-0 right-0 w-24 h-24 bg-theme-gradient-light rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </div>
