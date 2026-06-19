@@ -19,7 +19,7 @@ const STATUS_LABELS = {
 };
 
 export default function Submissions() {
-  const { applications, deleteSubmission, updateStatus, assignAgent, addRemark, requestDocument, uploadDocument, verifyDocuments, sendToAdminReview, selectBank, sendToBank, updateBankDecision, showToast } = useApp();
+  const { applications, deleteSubmission, updateStatus, assignAgent, addRemark, requestDocument, uploadDocument, verifyDocuments, sendToAdminReview, selectBank, sendToBank, updateBankDecision, showToast, switchView } = useApp();
   const { currentUser, isAdmin, isAgent, isClient, getUsersByRole } = useAuth();
   const [search, setSearch] = useState('');
   const [filterCat, setFilterCat] = useState('');
@@ -69,7 +69,30 @@ export default function Submissions() {
   const agents = getUsersByRole('agent');
 
   return (
-    <div className="w-full">
+  <div className="w-full">
+    <button
+  onClick={() => {
+    if (isAdmin) switchView('adminDashboardView');
+    else if (isAgent) switchView('agentDashboardView');
+    else switchView('clientDashboardView');
+  }}
+  className="btn-secondary mb-6 pl-3 group"
+>
+  <svg
+    className="w-4 h-4 transition-transform group-hover:-translate-x-0.5"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M10 19l-7-7m0 0l7-7m-7 7h18"
+    />
+  </svg>
+  Back to Home
+</button>
       <div className="flex items-center gap-3 mb-2">
         <div className="w-8 h-1 bg-theme-brand rounded-full" />
         <span className="text-xs font-semibold text-theme-brand uppercase tracking-widest">Records</span>

@@ -104,8 +104,11 @@ export function AuthProvider({ children }) {
       phoneVerified: true,
       createdAt: new Date().toISOString(),
     };
-    setUsers(prev => [...prev, newUser]);
-    return newUser;
+   setUsers(prev => [...prev, newUser]);
+setCurrentUser(newUser);
+setIsLoggedIn(true);
+localStorage.setItem('nexafin_session', newUser.id);
+return newUser;
   }, [users]);
 
   const addAgent = useCallback((data) => {

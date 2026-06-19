@@ -1,3 +1,6 @@
+import ChatAdmin from './pages/ChatAdmin.jsx';
+import CallSupport from './pages/CallSupport.jsx';
+import EmailSupport from './pages/EmailSupport.jsx';
 import './App.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext.jsx';
 import { AppProvider, useApp } from './contexts/AppContext.jsx';
@@ -30,34 +33,55 @@ function AppContent() {
     );
   }
 
-  function renderView() {
-    switch (currentView) {
-      case 'registerView':
-        return <Register />;
-      case 'categoryListView':
-        return <CategoryList />;
-      case 'formView':
-        return <DynamicForm />;
-      case 'submissionsView':
-        return <Submissions />;
-      case 'successView':
-        return <Success />;
-      case 'clientDashboardView':
-        return <ClientDashboard />;
-      case 'agentDashboardView':
-        return <AgentDashboard />;
-      case 'adminDashboardView':
-        return <AdminDashboard />;
-      case 'schemesView':
-        return <SchemesDashboard />;
-      case 'profileView':
-        return <Profile />;
-        case 'contactView':
-  return <Contact />;
-  case 'supportTicketView':
-  return <SupportTicket />;
-  case 'assignedAgentView':
-  return <AssignedAgent />;
+ function renderView() {
+  switch (currentView) {
+    case 'registerView':
+      return <Register />;
+
+    case 'categoryListView':
+      return <CategoryList />;
+
+    case 'formView':
+      return <DynamicForm />;
+
+    case 'submissionsView':
+      return <Submissions />;
+
+    case 'successView':
+      return <Success />;
+
+    case 'clientDashboardView':
+      return <ClientDashboard />;
+
+    case 'agentDashboardView':
+      return <AgentDashboard />;
+
+    case 'adminDashboardView':
+      return <AdminDashboard />;
+
+    case 'schemesView':
+      return <SchemesDashboard />;
+
+    case 'profileView':
+      return <Profile />;
+
+    case 'contactView':
+      return <Contact />;
+
+    case 'supportTicketView':
+      return <SupportTicket />;
+
+    case 'assignedAgentView':
+      return <AssignedAgent />;
+
+    case 'chatAdminView':
+      return <ChatAdmin />;
+
+    case 'callSupportView':
+      return <CallSupport />;
+
+    case 'emailSupportView':
+      return <EmailSupport />;
       default:
         if (isAdmin) return <AdminDashboard />;
         if (isAgent) return <AgentDashboard />;

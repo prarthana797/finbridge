@@ -1,14 +1,22 @@
+import { useState } from 'react';
+import Modal from './Modal.jsx';
 import { useApp } from '../contexts/AppContext.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function Navbar() {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { currentView, switchView, contactAdmin, getUnreadNotifications } = useApp();
   const { logout, isAdmin, isAgent, isClient, currentUser } = useAuth();
 
-  function handleLogout() {
-    logout();
-    switchView('loginView');
-  }
+function handleLogout() {
+  setShowLogoutModal(true);
+}
+
+function confirmLogout() {
+  logout();
+  switchView("landingView");
+  setShowLogoutModal(false);
+}
 
   const unreadNotifs = getUnreadNotifications(currentUser?.role).length;
 
@@ -90,6 +98,13 @@ export default function Navbar() {
           </button>
         </div>
       </div>
+      <Modal
+        isOpen={showLogoutModal}
+        title="Confirm Logout"
+        message="Are you sure you want to log out of your account?"
+        onConfirm={confirmLogout}
+        onCancel={() => setShowLogoutModal(false)}
+      />
     </header>
   );
 }

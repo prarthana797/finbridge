@@ -12,25 +12,31 @@ export default function Login() {
   const [otpError, setOtpError] = useState('');
   const [sendError, setSendError] = useState('');
 
-  function handleSendOtp() {
-    setSendError('');
-    if (!/^\d{10}$/.test(phone)) {
-      setSendError('Enter a valid 10-digit mobile number');
-      return;
-    }
-    const existing = findUserByEmailOrPhone(null, phone);
-    if (!existing) {
-      setSendError('No account found with this number. Please register first.');
-      return;
-    }
-    const result = sendOtp(phone);
-    if (result.success) {
-      setStep('otp');
-      setOtpError('');
-    } else {
-      setSendError(result.error);
-    }
+function handleSendOtp() {
+  setSendError('');
+
+  if (!/^\d{10}$/.test(phone)) {
+    setSendError('Enter a valid 10-digit mobile number');
+    return;
   }
+
+  const existing = findUserByEmailOrPhone(null, phone);
+
+  if (!existing) {
+    setSendError('No account found with this number. Please register first.');
+    return;
+  }
+
+  loginByPhone(phone);
+
+  if (existing.role === 'admin') {
+    switchView('adminDashboardView');
+  } else if (existing.role === 'agent') {
+    switchView('agentDashboardView');
+  } else {
+    switchView('clientDashboardView');
+  }
+}
 
   async function handleVerify(otp) {
     setLoading(true);
@@ -97,7 +103,7 @@ export default function Login() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                 </svg>
-                Send OTP
+                Login
               </button>
             </div>
             <div className="mt-6 pt-6 border-t border-theme-light text-center">

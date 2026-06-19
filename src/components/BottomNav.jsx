@@ -1,14 +1,22 @@
+import { useState } from 'react';
+import Modal from './Modal.jsx';
 import { useApp } from '../contexts/AppContext.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function BottomNav() {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const { currentView, switchView, contactAdmin, getUnreadNotifications } = useApp();
   const { logout, currentUser, isAdmin, isAgent, isClient } = useAuth();
 
-  function handleLogout() {
-    logout();
-    switchView('loginView');
-  }
+function handleLogout() {
+  setShowLogoutModal(true);
+}
+
+function confirmLogout() {
+  logout();
+  switchView("landingView");
+  setShowLogoutModal(false);
+}
 
   const unreadNotifs = getUnreadNotifications(currentUser?.role).length;
 
@@ -55,23 +63,39 @@ export default function BottomNav() {
         </svg>
         Profile
       </button>
-      {!isAdmin && (
-        <button
-  onClick={() => switchView('contactView')}
-  className={isActive(['contactView']) ? 'active' : ''}
+{!isAdmin && (
+  <button
+    onClick={() => switchView('contactView')}
+    className={isActive(['contactView']) ? 'active' : ''}
+  >
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+    </svg>
+    Contact
+  </button>
+)}
+
+<Modal
+  isOpen={showLogoutModal}
+  title="Confirm Logout"
+  message="Are you sure you want to log out of your account?"
+  onConfirm={confirmLogout}
+  onCancel={() => setShowLogoutModal(false)}
+/>
+<button
+  onClick={handleLogout}
+  className={isActive(['logout']) ? 'active' : ''}
 >
-         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-          </svg>
-          Contact
-        </button>
-      )}
-      <button onClick={handleLogout}>
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg>
-        Logout
-      </button>
+  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+    />
+  </svg>
+  Logout
+</button>
     </div>
   );
 }
