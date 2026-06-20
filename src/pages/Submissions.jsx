@@ -19,7 +19,7 @@ const STATUS_LABELS = {
 };
 
 export default function Submissions() {
-  const { applications, deleteSubmission, updateStatus, assignAgent, addRemark, requestDocument, uploadDocument, verifyDocuments, sendToAdminReview, selectBank, sendToBank, updateBankDecision, showToast } = useApp();
+  const { applications, deleteSubmission, updateStatus, assignAgent, addRemark, requestDocument, uploadDocument, verifyDocuments, sendToAdminReview, selectBank, sendToBank, updateBankDecision, showToast, switchView } = useApp();
   const { currentUser, isAdmin, isAgent, isClient, getUsersByRole } = useAuth();
   const [search, setSearch] = useState('');
   const [filterCat, setFilterCat] = useState('');
@@ -70,6 +70,14 @@ export default function Submissions() {
 
   return (
     <div className="w-full">
+      <div className="mb-6">
+  <button
+    onClick={() => switchView('adminDashboardView')}
+    className="btn-secondary"
+  >
+    ← Back to Home
+  </button>
+</div>
       <div className="flex items-center gap-3 mb-2">
         <div className="w-8 h-1 bg-theme-brand rounded-full" />
         <span className="text-xs font-semibold text-theme-brand uppercase tracking-widest">Records</span>

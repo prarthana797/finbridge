@@ -14,6 +14,11 @@ import ClientDashboard from './pages/ClientDashboard.jsx';
 import AgentDashboard from './pages/AgentDashboard.jsx';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import Profile from './pages/Profile.jsx';
+import Contact from './pages/Contact.jsx';
+import SupportTicket from './pages/SupportTicket.jsx';
+import AssignedAgent from './pages/AssignedAgent.jsx';
+import ServiceReview from './pages/ServiceReview.jsx';
+import ApplicationDetails from './pages/ApplicationDetails.jsx';
 
 function AppContent() {
   const { isLoggedIn, isAdmin, isAgent, isClient } = useAuth();
@@ -49,6 +54,16 @@ function AppContent() {
         return <SchemesDashboard />;
       case 'profileView':
         return <Profile />;
+        case 'contactView':
+  return <Contact />;
+  case 'supportTicketView':
+  return <SupportTicket />;
+  case 'assignedAgentView':
+  return <AssignedAgent />;
+  case 'serviceReviewView':
+  return <ServiceReview />;
+  case 'applicationDetailsView':
+  return <ApplicationDetails />;
       default:
         if (isAdmin) return <AdminDashboard />;
         if (isAgent) return <AgentDashboard />;

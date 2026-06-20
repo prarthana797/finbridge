@@ -71,188 +71,78 @@ export default function AdminDashboard() {
   function renderOverview() {
     return (
       <>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {stats.map((s, i) => (
-            <div key={i} className="card !p-4 md:!p-5">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: `${s.color}15` }}>
-                  <svg className="w-5 h-5" fill="none" stroke={s.color} viewBox="0 0 24 24" strokeWidth="2">
-                    <path strokeLinecap="round" strokeLinejoin="round" d={s.icon} />
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-2xl font-bold text-theme-primary">{s.value}</p>
-                  <p className="text-xs text-theme-muted">{s.label}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+<div className="mt-6 mb-8">
+  <div
+  onClick={() => switchView('serviceReviewView')}
+  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+>
+  <div>
+    <h3 className="font-bold text-lg text-gray-800">
+      Savings Services
+    </h3>
 
-        {unreadNotifs.length > 0 && (
-          <div className="card !border-l-4 !border-l-[#F59E0B] mb-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-[#F59E0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <p className="text-sm font-semibold text-theme-primary">{unreadNotifs.length} unread notification{unreadNotifs.length > 1 ? 's' : ''}</p>
-              </div>
-              <button onClick={handleMarkRead} className="text-xs text-theme-brand font-semibold hover:underline">Mark all read</button>
-            </div>
-            <div className="mt-3 space-y-2">
-              {unreadNotifs.slice(0, 5).map((n, i) => (
-                <p key={i} className="text-xs text-theme-secondary bg-blue-50 p-2 rounded">{n.message}</p>
-              ))}
-            </div>
-          </div>
-        )}
+    <p className="text-sm text-gray-500">
+      Applications: 0
+    </p>
+  </div>
+</div>
+<div
+  onClick={() => switchView('serviceReviewView')}
+  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+>
+  <div>
+    <h3 className="font-bold text-lg text-gray-800">
+      Credit Services
+    </h3>
 
-        <div className="flex gap-3 mb-8 flex-wrap">
-          <button onClick={() => setActiveTab('approvals')} className="btn-primary !w-auto !px-6">
-            <span className="flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Approval Center ({pendingReview.length})
-            </span>
-          </button>
-          <button onClick={() => setActiveTab('agents')} className="btn-secondary">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-            </svg>
-            Agent Management
-          </button>
-          <button onClick={() => switchView('submissionsView')} className="btn-secondary">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            All Applications
-          </button>
-        </div>
+    <p className="text-sm text-gray-500">
+      Applications: 0
+    </p>
+  </div>
+</div>
+<div
+  onClick={() => switchView('serviceReviewView')}
+  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+>
+  <div>
+    <h3 className="font-bold text-lg text-gray-800">
+      Insurance Services
+    </h3>
 
-        {pendingReview.length > 0 && (
-          <div className="mb-8">
-            <h3 className="section-title">Pending Admin Reviews ({pendingReview.length})</h3>
-            <div className="space-y-3">
-              {pendingReview.slice(0, 5).map((app) => (
-                <div key={app.id} className="card !p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <p className="font-semibold text-theme-primary">{app.scheme} - {app.data?.customerName}</p>
-                      <p className="text-xs text-theme-muted">{app.category} | Agent: {app.agentId}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button onClick={() => { const b = prompt('Bank name:'); if (b) selectBank(app.id, b); }} className="btn-primary !py-1 !px-3 !w-auto text-xs">Review & Select Bank</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    <p className="text-sm text-gray-500">
+      Applications: 0
+    </p>
+  </div>
+</div>
+<div
+  onClick={() => switchView('serviceReviewView')}
+  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+>
+  <div>
+    <h3 className="font-bold text-lg text-gray-800">
+      Pension Services
+    </h3>
 
-        {docsVerified.length > 0 && (
-          <div className="mb-8">
-            <h3 className="section-title">Verified by Agents ({docsVerified.length})</h3>
-            <div className="space-y-3">
-              {docsVerified.slice(0, 5).map((app) => (
-                <div key={app.id} className="card !p-4 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-theme-primary">{app.scheme} - {app.data?.customerName}</p>
-                    <p className="text-xs text-theme-muted">Agent: {app.agentId} | Docs verified</p>
-                  </div>
-                  <button onClick={() => updateStatus(app.id, 'ADMIN_REVIEW')} className="btn-primary !py-1.5 !px-4 !w-auto text-xs">Review</button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+    <p className="text-sm text-gray-500">
+      Applications: 0
+    </p>
+  </div>
+</div>
+<div
+  onClick={() => switchView('serviceReviewView')}
+  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+>
+  <div>
+    <h3 className="font-bold text-lg text-gray-800">
+      Social Security Services
+    </h3>
 
-        {sentToBank.length > 0 && (
-          <div className="mb-8">
-            <h3 className="section-title">Sent to Bank - Awaiting Response ({sentToBank.length})</h3>
-            <div className="space-y-3">
-              {sentToBank.slice(0, 5).map((app) => (
-                <div key={app.id} className="card !p-4 flex items-center justify-between">
-                  <div>
-                    <p className="font-semibold text-theme-primary">{app.scheme} - {app.data?.customerName}</p>
-                    <p className="text-xs text-theme-muted">Bank: {app.bankPartner || 'N/A'}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => updateBankDecision(app.id, 'approved')} className="btn-primary !py-1 !px-3 !w-auto text-xs !bg-[#10B981]">Approve</button>
-                    <button onClick={() => updateBankDecision(app.id, 'rejected')} className="btn-primary !py-1 !px-3 !w-auto text-xs !bg-[#EF4444]">Reject</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div className="card">
-            <h3 className="font-bold text-theme-primary mb-4">Recent Approvals</h3>
-            {approved.length === 0 ? <p className="text-sm text-theme-muted">No recent approvals</p> : (
-              <div className="space-y-2">
-                {approved.slice(0, 5).map(app => (
-                  <div key={app.id} className="flex items-center gap-2 text-sm">
-                    <span className="w-2 h-2 rounded-full bg-[#10B981]" />
-                    <span className="text-theme-secondary">{app.data?.customerName} - {app.scheme}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="card">
-            <h3 className="font-bold text-theme-primary mb-4">Recent Rejections</h3>
-            {rejected.length === 0 ? <p className="text-sm text-theme-muted">No recent rejections</p> : (
-              <div className="space-y-2">
-                {rejected.slice(0, 5).map(app => (
-                  <div key={app.id} className="flex items-center gap-2 text-sm">
-                    <span className="w-2 h-2 rounded-full bg-[#EF4444]" />
-                    <span className="text-theme-secondary">{app.data?.customerName} - {app.scheme}</span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="card mb-8">
-          <h3 className="font-bold text-theme-primary mb-4">Agent Performance</h3>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-theme-light">
-                  <th className="text-left py-2 px-3 text-theme-muted font-semibold">Agent</th>
-                  <th className="text-center py-2 px-3 text-theme-muted font-semibold">Applications</th>
-                  <th className="text-center py-2 px-3 text-theme-muted font-semibold">Pending</th>
-                  <th className="text-center py-2 px-3 text-theme-muted font-semibold">Verified</th>
-                  <th className="text-center py-2 px-3 text-theme-muted font-semibold">Approved</th>
-                  <th className="text-center py-2 px-3 text-theme-muted font-semibold">Rejected</th>
-                </tr>
-              </thead>
-              <tbody>
-                {performanceAgents.map(agent => {
-                  const agentApps = applications.filter(a => a.agentId === agent.id);
-                  return (
-                    <tr key={agent.id} className="border-b border-theme-light hover:bg-theme-bg">
-                      <td className="py-2 px-3 font-medium text-theme-primary">{agent.name}</td>
-                      <td className="text-center py-2 px-3 text-theme-secondary">{agentApps.length}</td>
-                      <td className="text-center py-2 px-3 text-[#F59E0B]">{agentApps.filter(a => a.status === 'AGENT_REVIEW').length}</td>
-                      <td className="text-center py-2 px-3 text-[#10B981]">{agentApps.filter(a => a.status === 'DOCUMENTS_VERIFIED').length}</td>
-                      <td className="text-center py-2 px-3 text-[#059669]">{agentApps.filter(a => a.status === 'APPROVED').length}</td>
-                      <td className="text-center py-2 px-3 text-[#DC2626]">{agentApps.filter(a => a.status === 'REJECTED').length}</td>
-                    </tr>
-                  );
-                })}
-                {performanceAgents.length === 0 && (
-                  <tr><td colSpan="6" className="text-center py-4 text-theme-muted">No agents found</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <p className="text-sm text-gray-500">
+      Applications: 0
+    </p>
+  </div>
+</div>
+</div>
       </>
     );
   }
@@ -467,10 +357,13 @@ export default function AdminDashboard() {
               Admin Portal
             </div>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">Admin Panel</h1>
-          <p className="text-blue-100/80 text-sm md:text-base max-w-xl mb-3">
-            Manage agents, review applications, and monitor performance.
-          </p>
+<p className="text-blue-100 text-sm mb-1">
+  Welcome,
+</p>
+
+<h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
+  Admin - {currentUser?.name || 'Administrator'}
+</h1>
         </div>
       </div>
 
