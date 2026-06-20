@@ -7,7 +7,7 @@ export default function MainLayout({ children }) {
   return (
     <>
       <Navbar />
-      <main className="flex-grow flex flex-col items-center px-4 py-8 md:py-12 pb-24 md:pb-12 w-full max-w-7xl mx-auto">
+      <main className="flex-grow flex flex-col w-full">
         {children}
       </main>
       <BottomNav />
