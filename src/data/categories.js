@@ -186,6 +186,81 @@ const SERVICE_LISTS = {
       results: ['eligibilityScore', 'approvalProbability', 'riskLevel', 'recommendedBanks', 'monthlyEmi', 'maxEligibleAmount'],
     },
     {
+  id: 'car_loan',
+  name: 'Car Loan',
+  groups: ['personalInfo', 'employmentInfo', 'financialInfo', 'loanInfo', 'addressInfo'],
+  customFields: [
+    {
+      n: 'vehicleType',
+      l: 'Vehicle Type',
+      t: 'select',
+      o: ['Car', 'SUV', 'Electric Vehicle']
+    },
+    {
+      n: 'vehicleCondition',
+      l: 'New or Used Vehicle',
+      t: 'select',
+      o: ['New', 'Used']
+    },
+    {
+      n: 'manufacturer',
+      l: 'Manufacturer',
+      t: 'text'
+    },
+    {
+      n: 'modelName',
+      l: 'Model Name',
+      t: 'text'
+    },
+    {
+      n: 'variant',
+      l: 'Variant',
+      t: 'text'
+    },
+    {
+      n: 'exShowroomPrice',
+      l: 'Ex-Showroom Price (₹)',
+      t: 'number'
+    },
+    {
+      n: 'onRoadPrice',
+      l: 'On-Road Price (₹)',
+      t: 'number'
+    },
+    {
+      n: 'dealerName',
+      l: 'Dealer Name',
+      t: 'text'
+    },
+    {
+      n: 'downPayment',
+      l: 'Down Payment Amount (₹)',
+      t: 'number'
+    }
+  ],
+  requiredDocs: [
+    'aadhaarFront',
+    'aadhaarBack',
+    'panCard',
+    'passportPhoto',
+    'salarySlip',
+    'bankStatement',
+    'vehicleQuotation'
+  ],
+  optionalDocs: [],
+  features: [
+    'emiCalculator',
+    'eligibilityChecker',
+    'interestRateComparison',
+    'repaymentSchedule'
+  ],
+  results: [
+    'monthlyEmi',
+    'eligibilityScore',
+    'approvalProbability'
+  ]
+},
+    {
       id: 'education_loan', name: 'Education Loan',
       groups: ['personalInfo', 'financialInfo', 'addressInfo'],
       customFields: [
