@@ -32,11 +32,96 @@ export default function DynamicForm() {
     }));
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    addSubmission(formData, currentUser?.id);
-    setSubmitted(true);
+  function isOptionalField(label) {
+  const lowerLabel = label.toLowerCase();
+
+  return (
+    lowerLabel.includes('if existing') ||
+    lowerLabel.includes('if any') ||
+    lowerLabel.includes('optional') ||
+    lowerLabel.includes('form 60') ||
+    lowerLabel.includes('review notes') ||
+    lowerLabel.includes('review application') ||
+    lowerLabel.includes('review details') ||
+    lowerLabel.includes('estimated') ||
+    lowerLabel.includes('eligibility score') ||
+    lowerLabel.includes('approval probability') ||
+    lowerLabel.includes('risk level') ||
+    lowerLabel.includes('debt-to-income') ||
+    lowerLabel.includes('bank recommendations') ||
+    lowerLabel.includes('selected plan') ||
+    lowerLabel.includes('available benefits') ||
+    lowerLabel.includes('pending documents') ||
+    lowerLabel.includes('payment history')
+  );
+}
+
+function getMissingFields(sectionsToCheck) {
+  const missingFields = [];
+
+  sectionsToCheck.forEach((section) => {
+    section.fields.forEach(([label, name, type]) => {
+      if (isOptionalField(label)) return;
+
+      const value = formData[name];
+
+      if (type === 'checkbox') {
+        if (!value) {
+          missingFields.push(`${section.title} - ${label}`);
+        }
+        return;
+      }
+
+      if (value === undefined || value === null || String(value).trim() === '') {
+        missingFields.push(`${section.title} - ${label}`);
+      }
+    });
+  });
+
+  return missingFields;
+}
+
+function handleNext() {
+  const missingFields = getMissingFields([currentSection]);
+
+  if (missingFields.length > 0) {
+    alert(
+      `Please fill all required details before going next:\n\n${missingFields
+        .slice(0, 12)
+        .join('\n')}${missingFields.length > 12 ? '\n...' : ''}`
+    );
+    return;
   }
+
+  setCurrentStep((prev) => Math.min(prev + 1, selectedSections.length - 1));
+}
+
+function handleSubmit(e) {
+  if (e) e.preventDefault();
+
+  const sectionsToCheck = selectedSections.slice(0, currentStep + 1);
+  const missingFields = getMissingFields(sectionsToCheck);
+
+  if (missingFields.length > 0) {
+    alert(
+      `Please complete all required details before submitting:\n\n${missingFields
+        .slice(0, 15)
+        .join('\n')}${missingFields.length > 15 ? '\n...' : ''}`
+    );
+    return;
+  }
+
+  const confirmSubmit = window.confirm(
+    'Confirm to submit this application?\n\nPlease check all the details before submitting.'
+  );
+
+  if (!confirmSubmit) return;
+
+  addSubmission(formData, currentUser?.id);
+  setSubmitted(true);
+}
+
+
 
   const schemeName = currentScheme.name.toLowerCase();
 
@@ -57,6 +142,26 @@ const isEShram = schemeName.includes('e-shram') || schemeName.includes('eshram')
 const isPmKisan = schemeName.includes('pm kisan') || schemeName.includes('kisan');
 const isLabourWelfare = schemeName.includes('labour welfare') || schemeName.includes('labor welfare');
 const isScholarship = schemeName.includes('scholarship');
+
+const isSeniorCitizenSavings =
+  schemeName.includes('senior citizen savings') ||
+  schemeName.includes('scss');
+
+const isGoalBasedInvestments =
+  schemeName.includes('goal based') ||
+  schemeName.includes('goal based investments');
+
+const isTaxSavingInvestments =
+  schemeName.includes('tax saving') ||
+  schemeName.includes('tax saving investments');
+const isFixedDeposit =
+  schemeName.includes('fixed deposit') ||
+  schemeName.includes('fd');
+
+const isRecurringDeposit =
+  schemeName.includes('recurring deposit') ||
+  schemeName.includes('rd');
+
 
   const commonPersonalDetails = (prefix) => [
     ['Full Name', `${prefix}FullName`, 'text'],
@@ -1837,7 +1942,440 @@ const scholarshipSections = [
   },
 ];
 
-  const selectedSections = isPersonalLoan
+  
+const fixedDepositSections = [
+  {
+    title: 'Customer Details',
+    fields: [
+      ['Full Name', 'fdFullName', 'text'],
+      ['Mobile Number', 'fdMobileNumber', 'tel'],
+      ['Email Address', 'fdEmail', 'email'],
+      ['Date of Birth', 'fdDateOfBirth', 'date'],
+      ['Gender', 'fdGender', 'select', ['Male', 'Female', 'Other']],
+      ['Customer ID (If Existing Customer)', 'fdCustomerId', 'text'],
+      ['PAN Number', 'fdPanNumber', 'text'],
+      ['Aadhaar Number', 'fdAadhaarNumber', 'text'],
+      ['Occupation', 'fdOccupation', 'text'],
+      ['Annual Income (₹)', 'fdAnnualIncome', 'number'],
+    ],
+  },
+  {
+    title: 'Address Details',
+    fields: [
+      ['Full Address', 'fdAddress', 'textarea'],
+      ['City', 'fdCity', 'text'],
+      ['State', 'fdState', 'text'],
+      ['Pincode', 'fdPincode', 'text'],
+    ],
+  },
+  {
+    title: 'Fixed Deposit Details',
+    fields: [
+      ['Deposit Amount (₹)', 'fdDepositAmount', 'number'],
+      ['Tenure', 'fdTenure', 'select', ['7 Days', '15 Days', '1 Month', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years']],
+      ['Interest Payout Option', 'fdInterestPayout', 'select', ['Monthly', 'Quarterly', 'Half-Yearly', 'Yearly', 'On Maturity']],
+      ['Maturity Instruction', 'fdMaturityInstruction', 'select', ['Credit to Linked Account', 'Auto Renew Principal', 'Auto Renew Principal + Interest']],
+      ['Senior Citizen', 'fdSeniorCitizen', 'select', ['Yes', 'No']],
+      ['Tax Saver FD Required', 'fdTaxSaverFd', 'select', ['Yes', 'No']],
+      ['Auto Renewal Required', 'fdAutoRenewal', 'select', ['Yes', 'No']],
+    ],
+  },
+  {
+    title: 'Bank Account Details',
+    fields: [
+      ['Bank Name', 'fdBankName', 'text'],
+      ['Branch Name', 'fdBranchName', 'text'],
+      ['Linked Savings Account Number', 'fdLinkedAccountNumber', 'text'],
+      ['Confirm Linked Savings Account Number', 'fdConfirmLinkedAccountNumber', 'text'],
+      ['IFSC Code', 'fdIfscCode', 'text'],
+      ['Account Type', 'fdAccountType', 'select', ['Savings', 'Current']],
+    ],
+  },
+  {
+    title: 'Nominee Details',
+    fields: [
+      ['Nominee Name', 'fdNomineeName', 'text'],
+      ['Nominee Relationship', 'fdNomineeRelation', 'text'],
+      ['Nominee Date of Birth', 'fdNomineeDob', 'date'],
+      ['Nominee Mobile Number', 'fdNomineeMobile', 'tel'],
+      ['Nominee Address', 'fdNomineeAddress', 'textarea'],
+      ['Guardian Name (If Nominee is Minor)', 'fdGuardianName', 'text'],
+    ],
+  },
+  {
+    title: 'Documents Required',
+    fields: [
+      ['Aadhaar Card Front', 'fdAadhaarFront', 'file'],
+      ['Aadhaar Card Back', 'fdAadhaarBack', 'file'],
+      ['PAN Card', 'fdPanCard', 'file'],
+      ['Passport Size Photo', 'fdPassportPhoto', 'file'],
+      ['Address Proof', 'fdAddressProof', 'file'],
+      ['Bank Passbook / Cancelled Cheque', 'fdPassbook', 'file'],
+      ['Form 60 (If PAN is not available)', 'fdForm60', 'file'],
+    ],
+  },
+  {
+    title: 'Review & Submit',
+    fields: [
+      ['I confirm that the above details are correct', 'fdDeclaration', 'checkbox'],
+      ['I agree to the terms and conditions', 'fdTerms', 'checkbox'],
+    ],
+  },
+];
+
+const recurringDepositSections = [
+  {
+    title: 'Customer Details',
+    fields: [
+      ['Full Name', 'rdFullName', 'text'],
+      ['Mobile Number', 'rdMobileNumber', 'tel'],
+      ['Email Address', 'rdEmail', 'email'],
+      ['Date of Birth', 'rdDateOfBirth', 'date'],
+      ['Gender', 'rdGender', 'select', ['Male', 'Female', 'Other']],
+      ['Customer ID (If Existing Customer)', 'rdCustomerId', 'text'],
+      ['PAN Number', 'rdPanNumber', 'text'],
+      ['Aadhaar Number', 'rdAadhaarNumber', 'text'],
+      ['Occupation', 'rdOccupation', 'text'],
+      ['Annual Income (₹)', 'rdAnnualIncome', 'number'],
+    ],
+  },
+  {
+    title: 'Address Details',
+    fields: [
+      ['Full Address', 'rdAddress', 'textarea'],
+      ['City', 'rdCity', 'text'],
+      ['State', 'rdState', 'text'],
+      ['Pincode', 'rdPincode', 'text'],
+    ],
+  },
+  {
+    title: 'Recurring Deposit Details',
+    fields: [
+      ['Monthly Deposit Amount (₹)', 'rdMonthlyDepositAmount', 'number'],
+      ['Deposit Tenure', 'rdTenure', 'select', ['6 Months', '1 Year', '2 Years', '3 Years', '5 Years', '10 Years']],
+      ['Monthly Installment Date', 'rdInstallmentDate', 'select', ['1st of Every Month', '5th of Every Month', '10th of Every Month', '15th of Every Month', '20th of Every Month', '25th of Every Month']],
+      ['Interest Payout Option', 'rdInterestPayout', 'select', ['On Maturity', 'Quarterly', 'Yearly']],
+      ['Senior Citizen', 'rdSeniorCitizen', 'select', ['Yes', 'No']],
+      ['Auto Debit Required', 'rdAutoDebitRequired', 'select', ['Yes', 'No']],
+      ['Maturity Instruction', 'rdMaturityInstruction', 'select', ['Credit to Linked Account', 'Auto Renew RD', 'Close on Maturity']],
+    ],
+  },
+  {
+    title: 'Bank Account Details',
+    fields: [
+      ['Bank Name', 'rdBankName', 'text'],
+      ['Branch Name', 'rdBranchName', 'text'],
+      ['Linked Savings Account Number', 'rdLinkedAccountNumber', 'text'],
+      ['Confirm Linked Savings Account Number', 'rdConfirmLinkedAccountNumber', 'text'],
+      ['IFSC Code', 'rdIfscCode', 'text'],
+      ['Account Type', 'rdAccountType', 'select', ['Savings', 'Current']],
+    ],
+  },
+  {
+    title: 'Nominee Details',
+    fields: [
+      ['Nominee Name', 'rdNomineeName', 'text'],
+      ['Nominee Relationship', 'rdNomineeRelationship', 'text'],
+      ['Nominee Date of Birth', 'rdNomineeDob', 'date'],
+      ['Nominee Mobile Number', 'rdNomineeMobile', 'tel'],
+      ['Nominee Address', 'rdNomineeAddress', 'textarea'],
+      ['Guardian Name (If Nominee is Minor)', 'rdGuardianName', 'text'],
+    ],
+  },
+  {
+    title: 'Documents Required',
+    fields: [
+      ['Aadhaar Card Front', 'rdAadhaarFront', 'file'],
+      ['Aadhaar Card Back', 'rdAadhaarBack', 'file'],
+      ['PAN Card', 'rdPanCard', 'file'],
+      ['Passport Size Photo', 'rdPassportPhoto', 'file'],
+      ['Address Proof', 'rdAddressProof', 'file'],
+      ['Bank Passbook / Cancelled Cheque', 'rdPassbook', 'file'],
+    ],
+  },
+  {
+    title: 'Review & Submit',
+    fields: [
+      ['Auto Debit Authorization', 'rdAutoDebitAuthorization', 'checkbox'],
+      ['I confirm that the above details are correct', 'rdDeclaration', 'checkbox'],
+      ['I agree to the terms and conditions', 'rdTerms', 'checkbox'],
+    ],
+  },
+];
+
+
+
+const seniorCitizenSavingsSections = [
+  {
+    title: 'Customer Details',
+    fields: [
+      ['Full Name', 'scssFullName', 'text'],
+      ['Mobile Number', 'scssMobileNumber', 'tel'],
+      ['Email Address', 'scssEmail', 'email'],
+      ['Date of Birth', 'scssDateOfBirth', 'date'],
+      ['Gender', 'scssGender', 'select', ['Male', 'Female', 'Other']],
+      ['PAN Number', 'scssPanNumber', 'text'],
+      ['Aadhaar Number', 'scssAadhaarNumber', 'text'],
+      ['Customer ID (If Existing Customer)', 'scssCustomerId', 'text'],
+    ],
+  },
+  {
+    title: 'Eligibility Details',
+    fields: [
+      ['Age', 'scssAge', 'number'],
+      ['Senior Citizen Category', 'scssSeniorCategory', 'select', ['60 Years and Above', 'Retired Defence Personnel', 'VRS Retiree', 'Other Eligible Category']],
+      ['Retirement Date', 'scssRetirementDate', 'date'],
+      ['Previous Employer / Department', 'scssPreviousEmployer', 'text'],
+      ['Pension Receiving', 'scssPensionReceiving', 'select', ['Yes', 'No']],
+      ['Monthly Pension Income (₹)', 'scssMonthlyPensionIncome', 'number'],
+    ],
+  },
+  {
+    title: 'Address Details',
+    fields: [
+      ['Full Address', 'scssAddress', 'textarea'],
+      ['City', 'scssCity', 'text'],
+      ['State', 'scssState', 'text'],
+      ['Pincode', 'scssPincode', 'text'],
+    ],
+  },
+  {
+    title: 'SCSS Investment Details',
+    fields: [
+      ['Deposit Amount (₹)', 'scssDepositAmount', 'number'],
+      ['Deposit Mode', 'scssDepositMode', 'select', ['Online Transfer', 'Cheque', 'Savings Account Debit']],
+      ['Tenure', 'scssTenure', 'select', ['5 Years']],
+      ['Interest Credit Frequency', 'scssInterestFrequency', 'select', ['Quarterly']],
+      ['Maturity Instruction', 'scssMaturityInstruction', 'select', ['Credit to Linked Account', 'Extend Account', 'Close on Maturity']],
+      ['Existing SCSS Account', 'scssExistingAccount', 'select', ['Yes', 'No']],
+      ['Existing SCSS Account Number', 'scssExistingAccountNumber', 'text'],
+    ],
+  },
+  {
+    title: 'Bank Account Details',
+    fields: [
+      ['Bank Name', 'scssBankName', 'text'],
+      ['Branch Name', 'scssBranchName', 'text'],
+      ['Linked Savings Account Number', 'scssLinkedAccountNumber', 'text'],
+      ['Confirm Linked Savings Account Number', 'scssConfirmLinkedAccountNumber', 'text'],
+      ['IFSC Code', 'scssIfscCode', 'text'],
+      ['Account Type', 'scssAccountType', 'select', ['Savings', 'Current']],
+    ],
+  },
+  {
+    title: 'Nominee Details',
+    fields: [
+      ['Nominee Name', 'scssNomineeName', 'text'],
+      ['Nominee Relationship', 'scssNomineeRelationship', 'text'],
+      ['Nominee Date of Birth', 'scssNomineeDob', 'date'],
+      ['Nominee Mobile Number', 'scssNomineeMobile', 'tel'],
+      ['Nominee Address', 'scssNomineeAddress', 'textarea'],
+      ['Guardian Name (If Nominee is Minor)', 'scssGuardianName', 'text'],
+    ],
+  },
+  {
+    title: 'Documents Required',
+    fields: [
+      ['Aadhaar Card Front', 'scssAadhaarFront', 'file'],
+      ['Aadhaar Card Back', 'scssAadhaarBack', 'file'],
+      ['PAN Card', 'scssPanCard', 'file'],
+      ['Passport Size Photo', 'scssPassportPhoto', 'file'],
+      ['Age Proof', 'scssAgeProof', 'file'],
+      ['Address Proof', 'scssAddressProof', 'file'],
+      ['Retirement Proof / Pension Order', 'scssRetirementProof', 'file'],
+      ['Bank Passbook / Cancelled Cheque', 'scssPassbook', 'file'],
+    ],
+  },
+  {
+    title: 'Review & Submit',
+    fields: [
+      ['I confirm that I am eligible for SCSS', 'scssEligibilityDeclaration', 'checkbox'],
+      ['I confirm that the above details are correct', 'scssDeclaration', 'checkbox'],
+      ['I agree to the terms and conditions', 'scssTerms', 'checkbox'],
+    ],
+  },
+];
+
+const goalBasedInvestmentSections = [
+  {
+    title: 'Investor Details',
+    fields: [
+      ['Full Name', 'goalFullName', 'text'],
+      ['Mobile Number', 'goalMobileNumber', 'tel'],
+      ['Email Address', 'goalEmail', 'email'],
+      ['Date of Birth', 'goalDateOfBirth', 'date'],
+      ['PAN Number', 'goalPanNumber', 'text'],
+      ['Aadhaar Number', 'goalAadhaarNumber', 'text'],
+      ['Occupation', 'goalOccupation', 'text'],
+      ['Annual Income (₹)', 'goalAnnualIncome', 'number'],
+    ],
+  },
+  {
+    title: 'Address Details',
+    fields: [
+      ['Full Address', 'goalAddress', 'textarea'],
+      ['City', 'goalCity', 'text'],
+      ['State', 'goalState', 'text'],
+      ['Pincode', 'goalPincode', 'text'],
+    ],
+  },
+  {
+    title: 'Goal Details',
+    fields: [
+      ['Goal Name', 'goalName', 'select', ['Child Education', 'Retirement', 'Home Purchase', 'Wedding', 'Travel', 'Emergency Fund', 'Wealth Creation', 'Other']],
+      ['Target Amount (₹)', 'goalTargetAmount', 'number'],
+      ['Current Savings for this Goal (₹)', 'goalCurrentSavings', 'number'],
+      ['Target Date', 'goalTargetDate', 'date'],
+      ['Time Horizon (Years)', 'goalTimeHorizon', 'number'],
+      ['Expected Inflation (%)', 'goalExpectedInflation', 'number'],
+    ],
+  },
+  {
+    title: 'Investment Preference',
+    fields: [
+      ['Investment Mode', 'goalInvestmentMode', 'select', ['SIP', 'Lump Sum', 'SIP + Lump Sum']],
+      ['Monthly Investment Capacity (₹)', 'goalMonthlyInvestment', 'number'],
+      ['One-Time Investment Amount (₹)', 'goalLumpSumAmount', 'number'],
+      ['Preferred Product', 'goalPreferredProduct', 'select', ['Mutual Fund', 'SIP', 'Fixed Deposit', 'Recurring Deposit', 'PPF', 'ELSS', 'NPS', 'Gold Investment']],
+      ['Risk Tolerance', 'goalRiskTolerance', 'select', ['Low', 'Medium', 'High']],
+      ['Expected Return (%)', 'goalExpectedReturn', 'number'],
+      ['Investment Experience', 'goalInvestmentExperience', 'select', ['Beginner', 'Intermediate', 'Experienced']],
+    ],
+  },
+  {
+    title: 'Bank Account Details',
+    fields: [
+      ['Bank Name', 'goalBankName', 'text'],
+      ['Branch Name', 'goalBranchName', 'text'],
+      ['Account Number', 'goalAccountNumber', 'text'],
+      ['Confirm Account Number', 'goalConfirmAccountNumber', 'text'],
+      ['IFSC Code', 'goalIfscCode', 'text'],
+      ['Account Type', 'goalAccountType', 'select', ['Savings', 'Current']],
+      ['Auto Debit Required', 'goalAutoDebit', 'select', ['Yes', 'No']],
+    ],
+  },
+  {
+    title: 'Nominee Details',
+    fields: [
+      ['Nominee Name', 'goalNomineeName', 'text'],
+      ['Nominee Relationship', 'goalNomineeRelationship', 'text'],
+      ['Nominee Date of Birth', 'goalNomineeDob', 'date'],
+      ['Nominee Mobile Number', 'goalNomineeMobile', 'tel'],
+      ['Nominee Address', 'goalNomineeAddress', 'textarea'],
+    ],
+  },
+  {
+    title: 'Documents Required',
+    fields: [
+      ['Aadhaar Card Front', 'goalAadhaarFront', 'file'],
+      ['Aadhaar Card Back', 'goalAadhaarBack', 'file'],
+      ['PAN Card', 'goalPanCard', 'file'],
+      ['Passport Size Photo', 'goalPassportPhoto', 'file'],
+      ['Address Proof', 'goalAddressProof', 'file'],
+      ['Bank Passbook / Cancelled Cheque', 'goalPassbook', 'file'],
+      ['Income Proof / ITR', 'goalIncomeProof', 'file'],
+    ],
+  },
+  {
+    title: 'Review & Submit',
+    fields: [
+      ['Risk Profile Declaration', 'goalRiskDeclaration', 'checkbox'],
+      ['I confirm that the above details are correct', 'goalDeclaration', 'checkbox'],
+      ['I agree to the terms and conditions', 'goalTerms', 'checkbox'],
+    ],
+  },
+];
+
+const taxSavingInvestmentSections = [
+  {
+    title: 'Applicant Details',
+    fields: [
+      ['Full Name', 'taxFullName', 'text'],
+      ['Mobile Number', 'taxMobileNumber', 'tel'],
+      ['Email Address', 'taxEmail', 'email'],
+      ['Date of Birth', 'taxDateOfBirth', 'date'],
+      ['PAN Number', 'taxPanNumber', 'text'],
+      ['Aadhaar Number', 'taxAadhaarNumber', 'text'],
+      ['Occupation', 'taxOccupation', 'text'],
+      ['Employer / Business Name', 'taxEmployerName', 'text'],
+    ],
+  },
+  {
+    title: 'Address Details',
+    fields: [
+      ['Full Address', 'taxAddress', 'textarea'],
+      ['City', 'taxCity', 'text'],
+      ['State', 'taxState', 'text'],
+      ['Pincode', 'taxPincode', 'text'],
+    ],
+  },
+  {
+    title: 'Tax Details',
+    fields: [
+      ['Assessment Year', 'taxAssessmentYear', 'select', ['2024-25', '2025-26', '2026-27']],
+      ['Tax Regime', 'taxRegime', 'select', ['Old Regime', 'New Regime']],
+      ['Annual Taxable Income (₹)', 'taxAnnualTaxableIncome', 'number'],
+      ['Existing 80C Investment Used (₹)', 'taxExisting80cUsed', 'number'],
+      ['Remaining 80C Limit (₹)', 'taxRemaining80cLimit', 'number'],
+      ['Form 16 Available', 'taxForm16Available', 'select', ['Yes', 'No']],
+    ],
+  },
+  {
+    title: 'Investment Details',
+    fields: [
+      ['Investment Type', 'taxInvestmentType', 'select', ['ELSS', 'PPF', 'NSC', 'Tax Saving FD', 'ULIP', 'NPS', 'Senior Citizen Savings Scheme']],
+      ['Investment Amount (₹)', 'taxInvestmentAmount', 'number'],
+      ['Investment Mode', 'taxInvestmentMode', 'select', ['One-Time', 'Monthly SIP', 'Quarterly']],
+      ['Investment Tenure', 'taxInvestmentTenure', 'select', ['3 Years', '5 Years', '10 Years', '15 Years']],
+      ['Risk Preference', 'taxRiskPreference', 'select', ['Low', 'Medium', 'High']],
+      ['Expected Return (%)', 'taxExpectedReturn', 'number'],
+    ],
+  },
+  {
+    title: 'Bank Account Details',
+    fields: [
+      ['Bank Name', 'taxBankName', 'text'],
+      ['Branch Name', 'taxBranchName', 'text'],
+      ['Account Number', 'taxAccountNumber', 'text'],
+      ['Confirm Account Number', 'taxConfirmAccountNumber', 'text'],
+      ['IFSC Code', 'taxIfscCode', 'text'],
+      ['Account Type', 'taxAccountType', 'select', ['Savings', 'Current']],
+    ],
+  },
+  {
+    title: 'Nominee Details',
+    fields: [
+      ['Nominee Name', 'taxNomineeName', 'text'],
+      ['Nominee Relationship', 'taxNomineeRelationship', 'text'],
+      ['Nominee Date of Birth', 'taxNomineeDob', 'date'],
+      ['Nominee Mobile Number', 'taxNomineeMobile', 'tel'],
+      ['Nominee Address', 'taxNomineeAddress', 'textarea'],
+    ],
+  },
+  {
+    title: 'Documents Required',
+    fields: [
+      ['Aadhaar Card Front', 'taxAadhaarFront', 'file'],
+      ['Aadhaar Card Back', 'taxAadhaarBack', 'file'],
+      ['PAN Card', 'taxPanCard', 'file'],
+      ['Passport Size Photo', 'taxPassportPhoto', 'file'],
+      ['Address Proof', 'taxAddressProof', 'file'],
+      ['Form 16 / Salary Certificate', 'taxForm16', 'file'],
+      ['Income Tax Return', 'taxItr', 'file'],
+      ['Bank Passbook / Cancelled Cheque', 'taxPassbook', 'file'],
+    ],
+  },
+  {
+    title: 'Review & Submit',
+    fields: [
+      ['Tax Saving Declaration', 'taxSavingDeclaration', 'checkbox'],
+      ['I confirm that the above details are correct', 'taxDeclaration', 'checkbox'],
+      ['I agree to the terms and conditions', 'taxTerms', 'checkbox'],
+    ],
+  },
+];
+
+const selectedSections = isPersonalLoan
     ? personalLoanSections
     : isHomeLoan
       ? homeLoanSections
@@ -1871,7 +2409,17 @@ const scholarshipSections = [
                                   ? labourWelfareSections
                                   : isScholarship
                                     ? scholarshipSections
-                                    : [];
+                                    : isFixedDeposit
+    ? fixedDepositSections
+    : isRecurringDeposit
+      ? recurringDepositSections
+      : isSeniorCitizenSavings
+  ? seniorCitizenSavingsSections
+: isGoalBasedInvestments
+    ? goalBasedInvestmentSections
+: isTaxSavingInvestments
+      ? taxSavingInvestmentSections
+        : [];
 
   const progress =
     selectedSections.length > 0
@@ -1879,6 +2427,18 @@ const scholarshipSections = [
       : 0;
 
   const currentSection = selectedSections[currentStep];
+
+  const nextSection = selectedSections[currentStep + 1];
+  const isLastStep = currentStep >= selectedSections.length - 1;
+  const isDocumentUploadStep =
+    currentSection?.title?.toLowerCase().includes('upload') ||
+    currentSection?.title?.toLowerCase().includes('document');
+  const hasReviewAfterThis =
+    nextSection?.title?.toLowerCase().includes('review');
+
+  const shouldShowSubmitButton =
+    isLastStep || (isDocumentUploadStep && hasReviewAfterThis);
+
 
   const renderField = ([label, name, type, options]) => {
   const lowerLabel = label.toLowerCase();
@@ -2169,21 +2729,21 @@ const scholarshipSections = [
                   </button>
                 )}
 
-                {currentStep < selectedSections.length - 1 ? (
+                {!shouldShowSubmitButton ? (
                   <button
                     type="button"
                     className="btn-primary flex-1"
-                    onClick={() =>
-                      setCurrentStep((prev) =>
-                        Math.min(prev + 1, selectedSections.length - 1)
-                      )
-                    }
+                    onClick={handleNext}
                   >
                     Next
                   </button>
                 ) : (
-                  <button type="submit" className="btn-primary flex-1">
-                    Submit Application
+                  <button
+                    type="button"
+                    className="btn-primary flex-1"
+                    onClick={handleSubmit}
+                  >
+                    Submit
                   </button>
                 )}
               </div>

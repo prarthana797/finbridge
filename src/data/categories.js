@@ -95,6 +95,8 @@ export const DOCUMENTS = {
   casteCertificate: { id: 'casteCertificate', label: 'Caste Certificate', type: 'image' },
   domicileCertificate: { id: 'domicileCertificate', label: 'Domicile Certificate', type: 'image' },
   passbook: { id: 'passbook', label: 'Bank Passbook / Cancelled Cheque', type: 'image' },
+  addressProof: { id: 'addressProof', label: 'Address Proof', type: 'image' },
+  form60: { id: 'form60', label: 'Form 60 (If PAN is not available)', type: 'image' },
   drivingLicense: { id: 'drivingLicense', label: 'Driving License', type: 'image' },
   rcBook: { id: 'rcBook', label: 'RC Book / Registration Certificate', type: 'image' },
   policyDoc: { id: 'policyDoc', label: 'Existing Policy Document', type: 'image' },
@@ -295,21 +297,109 @@ const SERVICE_LISTS = {
 
   savings: [
     {
-      id: 'fd_rd',name: 'FD & RD Deposits',
-      groups: ['personalInfo', 'addressInfo'],
-      customFields: [
-        { n: 'depositAmount', l: 'Deposit Amount (₹)', t: 'number' },
-        { n: 'tenure', l: 'Tenure (Months)', t: 'number' },
-        { n: 'interestPayout', l: 'Interest Payout', t: 'select', o: ['Monthly', 'Quarterly', 'Half-Yearly', 'Yearly', 'At Maturity'] },
-        { n: 'bankAccount', l: 'Linked Bank Account', t: 'text' },
-        { n: 'ifscCode', l: 'IFSC Code', t: 'text' },
-      ],
-      nomineeInfo: true,
-      requiredDocs: ['aadhaarFront', 'aadhaarBack', 'panCard', 'passportPhoto', 'passbook'],
-      optionalDocs: [],
-      features: ['returnsCalculator', 'interestRateComparison'],
-      results: ['maturityAmount', 'totalInvestment', 'estimatedReturns'],
+  id: 'fixed_deposit',
+  name: 'Fixed Deposit (FD)',
+  groups: ['personalInfo', 'addressInfo'],
+  customFields: [
+    // Customer / KYC Details
+    { n: 'customerId', l: 'Customer ID (If Existing Customer)', t: 'text' },
+    { n: 'panNumber', l: 'PAN Number', t: 'text' },
+    { n: 'aadhaarNumber', l: 'Aadhaar Number', t: 'text' },
+    { n: 'occupation', l: 'Occupation', t: 'text' },
+    { n: 'annualIncome', l: 'Annual Income (₹)', t: 'number' },
+
+    // FD Deposit Details
+    { n: 'depositAmount', l: 'Deposit Amount (₹)', t: 'number' },
+    {
+      n: 'tenure',
+      l: 'Tenure',
+      t: 'select',
+      o: ['7 Days', '15 Days', '1 Month', '3 Months', '6 Months', '1 Year', '2 Years', '3 Years', '5 Years'],
     },
+    {
+      n: 'interestPayout',
+      l: 'Interest Payout Option',
+      t: 'select',
+      o: ['Monthly', 'Quarterly', 'Half-Yearly', 'Yearly', 'On Maturity'],
+    },
+    {
+      n: 'maturityInstruction',
+      l: 'Maturity Instruction',
+      t: 'select',
+      o: ['Credit to Linked Account', 'Auto Renew Principal', 'Auto Renew Principal + Interest'],
+    },
+    {
+      n: 'seniorCitizen',
+      l: 'Senior Citizen',
+      t: 'select',
+      o: ['Yes', 'No'],
+    },
+    {
+      n: 'taxSaverFd',
+      l: 'Tax Saver FD Required',
+      t: 'select',
+      o: ['Yes', 'No'],
+    },
+    {
+      n: 'autoRenewal',
+      l: 'Auto Renewal Required',
+      t: 'select',
+      o: ['Yes', 'No'],
+    },
+
+    // Bank Account Details
+    { n: 'bankName', l: 'Bank Name', t: 'text' },
+    { n: 'branchName', l: 'Branch Name', t: 'text' },
+    { n: 'linkedAccountNumber', l: 'Linked Savings Account Number', t: 'text' },
+    { n: 'confirmLinkedAccountNumber', l: 'Confirm Linked Savings Account Number', t: 'text' },
+    { n: 'ifscCode', l: 'IFSC Code', t: 'text' },
+    {
+      n: 'accountType',
+      l: 'Account Type',
+      t: 'select',
+      o: ['Savings', 'Current'],
+    },
+
+    // Nominee Details
+    { n: 'nomineeName', l: 'Nominee Name', t: 'text' },
+    { n: 'nomineeRelation', l: 'Nominee Relationship', t: 'text' },
+    { n: 'nomineeDob', l: 'Nominee Date of Birth', t: 'date' },
+    { n: 'nomineeMobile', l: 'Nominee Mobile Number', t: 'tel' },
+    { n: 'nomineeAddress', l: 'Nominee Address', t: 'textarea' },
+    { n: 'guardianName', l: 'Guardian Name (If Nominee is Minor)', t: 'text' },
+  ],
+  requiredDocs: [
+    'aadhaarFront',
+    'aadhaarBack',
+    'panCard',
+    'passportPhoto',
+    'addressProof',
+    'passbook',
+  ],
+  optionalDocs: ['form60'],
+  features: ['returnsCalculator', 'interestRateComparison'],
+  results: ['maturityAmount', 'totalInvestment', 'estimatedReturns'],
+},
+{
+  id: 'recurring_deposit',
+  name: 'Recurring Deposit (RD)',
+  groups: ['personalInfo', 'addressInfo'],
+  customFields: [
+    { n: 'monthlyDepositAmount', l: 'Monthly Deposit Amount (₹)', t: 'number' },
+    { n: 'tenure', l: 'Tenure (Months)', t: 'number' },
+    { n: 'installmentDate', l: 'Monthly Installment Date', t: 'select', o: ['1st', '5th', '10th', '15th', '20th', '25th'] },
+    { n: 'interestPayout', l: 'Interest Payout', t: 'select', o: ['At Maturity', 'Quarterly', 'Yearly'] },
+    { n: 'bankAccount', l: 'Linked Bank Account', t: 'text' },
+    { n: 'ifscCode', l: 'IFSC Code', t: 'text' },
+    { n: 'autoDebit', l: 'Auto Debit Required', t: 'select', o: ['Yes', 'No'] },
+    { n: 'nomineeName', l: 'Nominee Name', t: 'text' },
+    { n: 'nomineeRelation', l: 'Nominee Relationship', t: 'text' },
+  ],
+  requiredDocs: ['aadhaarFront', 'aadhaarBack', 'panCard', 'passportPhoto', 'passbook'],
+  optionalDocs: [],
+  features: ['returnsCalculator', 'interestRateComparison'],
+  results: ['maturityAmount', 'totalInvestment', 'estimatedReturns'],
+},
     
     
     

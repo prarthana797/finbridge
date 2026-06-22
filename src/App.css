@@ -651,3 +651,46 @@ input[type="number"] {
   -moz-appearance: textfield !important;
   appearance: textfield !important;
 }
+/* Professional Select Box */
+select.input-field,
+.input-field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  background-color: #ffffff;
+  border: 1.5px solid #dbe3f0;
+  border-radius: 14px;
+  padding: 14px 44px 14px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #0f172a;
+  cursor: pointer;
+  outline: none;
+
+  background-image: linear-gradient(45deg, transparent 50%, #2563eb 50%),
+    linear-gradient(135deg, #2563eb 50%, transparent 50%);
+  background-position:
+    calc(100% - 22px) 50%,
+    calc(100% - 15px) 50%;
+  background-size: 7px 7px, 7px 7px;
+  background-repeat: no-repeat;
+
+  transition: all 0.2s ease;
+}
+
+select.input-field:hover {
+  border-color: #2563eb;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.08);
+}
+
+select.input-field:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+select.input-field option {
+  font-size: 15px;
+  padding: 12px;
+  color: #0f172a;
+}
