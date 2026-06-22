@@ -3,6 +3,12 @@ export default function SupportTicket() {
   const { switchView } = useApp();
   return (
     <div className="w-full">
+      <button
+  onClick={() => switchView("contactView")}
+  className="btn-secondary mb-6 pl-3 group"
+>
+  ← Back to Home
+</button>
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-1 bg-theme-brand rounded-full" />

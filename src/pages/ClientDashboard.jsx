@@ -136,13 +136,10 @@ export default function ClientDashboard() {
               Secure Portal
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-  Welcome Back
-</h1>
-
-<p className="text-lg text-blue-100 font-medium">
-  Client - {currentUser?.name}
-</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">Welcome Back</h1>
+          <p className="text-blue-100/80 text-sm md:text-base max-w-xl mb-3">
+            Manage your financial services and applications securely from one place.
+          </p>
           <div className="flex items-center gap-3 text-blue-200/60 text-xs">
             <span className="flex items-center gap-1.5">
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
@@ -153,35 +150,7 @@ export default function ClientDashboard() {
           </div>
         </div>
       </div>
-<div className="bg-white rounded-2xl p-3 shadow-sm mt-4">
-  <div className="flex overflow-x-auto gap-4 snap-x snap-mandatory scrollbar-hide">
 
-    <div className="min-w-full snap-center bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl p-5 text-white">
-      <h3 className="text-xl font-bold">Personal Loan</h3>
-      <p className="mt-2 text-sm">Loans up to ₹10 Lakhs</p>
-      <button className="mt-4 bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold">
-        Apply Now
-      </button>
-    </div>
-
-    <div className="min-w-full snap-center bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-2xl p-5 text-white">
-      <h3 className="text-xl font-bold">Fixed Deposit</h3>
-      <p className="mt-2 text-sm">Returns up to 7.5% p.a.</p>
-      <button className="mt-4 bg-white text-emerald-600 px-4 py-2 rounded-lg font-semibold">
-        Open FD
-      </button>
-    </div>
-
-    <div className="min-w-full snap-center bg-gradient-to-r from-purple-600 to-purple-400 rounded-2xl p-5 text-white">
-      <h3 className="text-xl font-bold">Credit Cards</h3>
-      <p className="mt-2 text-sm">Lifetime free cards available</p>
-      <button className="mt-4 bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold">
-        View Cards
-      </button>
-    </div>
-
-  </div>
-</div>
       <div className="flex items-center justify-end">
         <div id="google_translate_element" />
       </div>
@@ -222,24 +191,61 @@ export default function ClientDashboard() {
         </div>
       </div>
 
-      <div className="flex gap-3 flex-wrap animate-fade-in animate-fade-in-d4">
-        <button onClick={() => switchView('schemesView')} 
-        className="btn-primary !w-auto !px-6 !py-3 !rounded-xl shadow-md hover:shadow-lg active:scale-[0.98] transition-all duration-200">
-          <span className="flex items-center gap-2">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            Apply for Service
-          </span>
-        </button>
-        <button onClick={() => switchView('submissionsView')} className="btn-secondary !rounded-xl !py-3 hover:shadow-md active:scale-[0.98] transition-all duration-200">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          View Applications
-        </button>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {stats.map((s, i) => (
+          <div key={i} className={`card !p-4 md:!p-5 animate-fade-in animate-fade-in-d${i + 1}`}>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm" style={{ background: `${BLUE}12` }}>
+                <svg className="w-5 h-5" fill="none" stroke={BLUE} viewBox="0 0 24 24" strokeWidth="1.5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d={STAT_ICONS[i]} />
+                </svg>
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-theme-primary leading-none mb-1">
+                  <CountUp value={s.value} />
+                </p>
+                <p className="text-xs text-theme-muted font-medium">{s.label}</p>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-       {activeApps.length > 0 && (
+
+      {unreadNotifs.length > 0 && (
+        <div className="notif-center p-4 md:p-5 animate-fade-in animate-fade-in-d3">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-[#EEF3FF] flex items-center justify-center">
+                <svg className="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-theme-primary">Notifications</p>
+                <p className="text-xs text-theme-muted">{unreadNotifs.length} unread</p>
+              </div>
+            </div>
+            <button onClick={handleMarkRead} className="text-xs font-semibold text-[#2563EB] hover:text-[#1D4ED8] bg-[#EEF3FF] hover:bg-[#DBEAFE] px-3 py-1.5 rounded-lg transition-all duration-200">
+              Mark all read
+            </button>
+          </div>
+          <div className="space-y-1">
+            {unreadNotifs.slice(0, 5).map((n, i) => (
+              <div key={i} className={`notif-item flex items-start gap-3 rounded-lg p-3 ${i === 0 ? 'notif-item-unread' : ''}`}>
+                <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${i === 0 ? 'bg-[#2563EB]' : 'bg-[#CBD5E1]'}`} />
+                <div className="flex-1 min-w-0">
+                  <p className={`text-xs ${i === 0 ? 'font-semibold text-theme-primary' : 'text-theme-secondary'}`}>{n.message}</p>
+                  <p className="text-[11px] text-theme-muted mt-0.5">
+                    {new Date(n.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeApps.length > 0 && (
         <div className="animate-fade-in animate-fade-in-d5">
           <div className="flex items-center gap-3 mb-4">
             <div className="section-header-bar" />

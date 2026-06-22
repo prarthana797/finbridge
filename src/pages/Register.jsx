@@ -43,15 +43,21 @@ export default function Register() {
     setOtpError('');
     await new Promise(r => setTimeout(r, 400));
     const result = verifyOtp(form.phone, otp);
-    if (result.success) {
-      register({ ...form, phone: form.phone });
-      showToast('Account created successfully! Please login.');
-      setStep('form');
-      setForm({ name: '', phone: '', email: '', password: '', role: 'client' });
-      switchView('loginView');
-    } else {
-      setOtpError(result.error);
-    }
+if (result.success) {
+  const newUser = register({ ...form, phone: form.phone });
+
+  showToast('Account created successfully!');
+
+  if (newUser?.role === 'admin') {
+    switchView('adminDashboardView');
+  } else if (newUser?.role === 'agent') {
+    switchView('agentDashboardView');
+  } else {
+    switchView('clientDashboardView');
+  }
+} else {
+  setOtpError(result.error);
+}
     setLoading(false);
   }
 
