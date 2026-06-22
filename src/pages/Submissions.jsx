@@ -3,6 +3,7 @@ import { useApp } from '../contexts/AppContext.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import { CATEGORIES } from '../data/categories.js';
 import Modal from '../components/Modal.jsx';
+import ApplicationPDF from '../components/ApplicationPDF.jsx';
 
 const STATUS_LABELS = {
   SUBMITTED: { label: 'Submitted', color: '#3B82F6', bg: '#DBEAFE' },
@@ -127,13 +128,24 @@ export default function Submissions() {
                     {s.agentId && <p className="text-xs text-theme-muted mt-1">Agent ID: {s.agentId}</p>}
                   </div>
                   <div className="flex gap-2 flex-wrap">
-                    <button onClick={() => setExpandedId(expandedId === s.id ? null : s.id)} className="btn-secondary !py-1.5 !px-3 text-xs">
-                      {expandedId === s.id ? 'Collapse' : 'Details'}
-                    </button>
-                    {isClient && (s.status === 'SUBMITTED' || s.status === 'DOCUMENTS_PENDING') && (
-                      <button onClick={() => setDeleteId(s.id)} className="text-xs font-semibold px-3 py-1.5 rounded border border-[#FCA5A5] text-[#EF4444] hover:bg-[#FEF2F2] transition-colors">Delete</button>
-                    )}
-                  </div>
+  <button
+    onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
+    className="btn-secondary !py-1.5 !px-3 text-xs"
+  >
+    {expandedId === s.id ? 'Collapse' : 'Details'}
+  </button>
+
+  <ApplicationPDF application={s} />
+
+  {isClient && (s.status === 'SUBMITTED' || s.status === 'DOCUMENTS_PENDING') && (
+    <button
+      onClick={() => setDeleteId(s.id)}
+      className="text-xs font-semibold px-3 py-1.5 rounded border border-[#FCA5A5] text-[#EF4444] hover:bg-[#FEF2F2] transition-colors"
+    >
+      Delete
+    </button>
+  )}
+</div>
                 </div>
 
                 {expandedId === s.id && (
