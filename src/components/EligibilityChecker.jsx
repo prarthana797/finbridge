@@ -45,7 +45,7 @@ export default function EligibilityChecker() {
   return (
     <div className="card !border-t-2 !border-t-[#2563EB]">
       <h3 className="text-lg font-semibold text-theme-primary mb-4">
-        AI Eligibility Checker
+        Eligibility Checker
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -72,7 +72,7 @@ export default function EligibilityChecker() {
         </div>
 
         <div>
-          <label className="label">Credit Score</label>
+          <label className="label">CIBIL Score</label>
           <input
             type="text"
             inputMode="numeric"
