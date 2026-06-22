@@ -1,32 +1,35 @@
 import { useApp } from '../contexts/AppContext.jsx';
+
 export default function SupportTicket() {
   const { switchView } = useApp();
+
   return (
-    <div className="w-full">
+    <div className="w-full max-w-md mx-auto px-5 pt-6 pb-32">
       <button
-  onClick={() => switchView("contactView")}
-  className="btn-secondary mb-6 pl-3 group"
->
-  ← Back to Home
-</button>
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
+        onClick={() => switchView("contactView")}
+        className="btn-secondary mb-6"
+      >
+        ← Back
+      </button>
+
+      <div className="mb-6">
+        <div className="flex items-center gap-3 mb-3">
           <div className="w-8 h-1 bg-theme-brand rounded-full" />
           <span className="text-xs font-semibold text-theme-brand uppercase tracking-widest">
             Support
           </span>
         </div>
 
-        <h2 className="text-2xl md:text-3xl font-bold text-theme-primary">
+        <h2 className="text-2xl font-bold text-theme-primary">
           Raise a Support Ticket
         </h2>
 
-        <p className="text-theme-muted mt-2">
+        <p className="text-theme-muted text-sm mt-2 leading-relaxed">
           Describe your issue and our team will get back to you.
         </p>
       </div>
 
-      <div className="card space-y-4">
+      <div className="bg-white rounded-2xl border border-gray-200 p-5 shadow-sm space-y-4">
         <input
           type="text"
           placeholder="Subject"
@@ -36,15 +39,15 @@ export default function SupportTicket() {
         <textarea
           placeholder="Describe your issue..."
           rows="5"
-          className="input-field"
+          className="input-field resize-none"
         />
 
         <button
-  className="btn-primary w-full"
-  onClick={() => switchView('successView')}
->
-  Submit Ticket
-</button>
+          className="btn-primary w-full"
+          onClick={() => switchView('successView')}
+        >
+          Submit Ticket
+        </button>
       </div>
     </div>
   );
