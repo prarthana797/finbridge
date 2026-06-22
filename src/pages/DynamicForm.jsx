@@ -1918,7 +1918,11 @@ const scholarshipSections = [
 
       <label
         htmlFor={name}
+<<<<<<< HEAD
+        className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/60 px-4 py-6 text-center transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-md"
+=======
         className="group flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-blue-300 bg-blue-50/50 px-3 py-3 transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-sm"
+>>>>>>> origin/feature/admin-review
       >
         <input
           id={name}
@@ -1928,6 +1932,24 @@ const scholarshipSections = [
           className="hidden"
         />
 
+<<<<<<< HEAD
+        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl shadow-sm transition-all duration-300 group-hover:scale-110">
+          📤
+        </div>
+
+        <p className="text-sm font-semibold text-theme-primary">
+          {formData[name] ? 'File Selected' : 'Click to Upload'}
+        </p>
+
+        <p className="mt-1 text-xs text-theme-muted">
+          PDF, JPG, PNG allowed
+        </p>
+
+        {formData[name] && (
+          <div className="mt-3 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+            ✓ {formData[name]}
+          </div>
+=======
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-lg shadow-sm transition group-hover:scale-105">
           📤
         </div>
@@ -1945,6 +1967,7 @@ const scholarshipSections = [
           <span className="shrink-0 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
             ✓
           </span>
+>>>>>>> origin/feature/admin-review
         )}
       </label>
     </div>
