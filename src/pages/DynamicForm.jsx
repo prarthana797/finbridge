@@ -108,12 +108,13 @@ const isScholarship = schemeName.includes('scholarship');
     {
       title: 'Financial Details',
       fields: [
-        ['Monthly Income', 'personalMonthlyIncome', 'number'],
-        ['Other Sources of Income', 'personalOtherIncome', 'text'],
-        ['Existing EMIs', 'personalExistingEmis', 'number'],
-        ['Credit Card Outstanding', 'personalCreditCardOutstanding', 'number'],
-        ['Bank Account Details', 'personalBankAccountDetails', 'text'],
-        ['Savings & Investments', 'personalSavingsInvestments', 'text'],
+        ['Monthly Income', 'personalLoanMonthlyIncome', 'number'],
+['Other Sources of Income', 'personalLoanOtherIncome', 'text'],
+['Existing EMIs', 'personalLoanExistingEmis', 'number'],
+['CIBIL Score', 'personalLoanCibilScore', 'number'],
+['Credit Card Outstanding', 'personalLoanCreditCardOutstanding', 'number'],
+['Bank Account Details', 'personalLoanBankAccountDetails', 'text'],
+['Savings & Investments', 'personalLoanSavingsInvestments', 'number'],
       ],
     },
     {
@@ -182,6 +183,7 @@ const isScholarship = schemeName.includes('scholarship');
       fields: [
         ['Monthly Income', 'homeMonthlyIncome', 'number'],
         ['Existing EMIs', 'homeExistingEmis', 'number'],
+        ['CIBIL Score', 'homeLoanCibilScore', 'number'],
         ['Credit Card Liabilities', 'homeCreditCardLiabilities', 'number'],
         ['Savings & Investments', 'homeSavingsInvestments', 'text'],
         ['Bank Account Details', 'homeBankAccountDetails', 'text'],
@@ -251,6 +253,7 @@ const isScholarship = schemeName.includes('scholarship');
       fields: [
         ['Monthly Income', 'carMonthlyIncome', 'number'],
         ['Existing EMIs', 'carExistingEmis', 'number'],
+        ['CIBIL Score', 'carLoanCibilScore', 'number'],
         ['Credit Card Dues', 'carCreditCardDues', 'number'],
         ['Bank Account Details', 'carBankAccountDetails', 'text'],
         ['Credit Score (CIBIL)', 'carCreditScore', 'number'],
@@ -369,6 +372,7 @@ const isScholarship = schemeName.includes('scholarship');
         ['Salary Slips', 'eduSalarySlips', 'file'],
         ['Business Name', 'eduGuardianBusinessName', 'text'],
         ['Annual Income', 'eduGuardianAnnualIncome', 'number'],
+        ['CIBIL Score', 'educationLoanCibilScore', 'number'],
         ['GST Details', 'eduGstDetails', 'text'],
         ['ITR Documents', 'eduItrDocuments', 'file'],
       ],
@@ -426,6 +430,7 @@ const isScholarship = schemeName.includes('scholarship');
         ['Annual Profit', 'annualProfit', 'number'],
         ['Existing Business Loans', 'existingBusinessLoans', 'text'],
         ['Existing EMIs', 'businessExistingEmis', 'number'],
+        ['CIBIL Score', 'businessLoanCibilScore', 'number'],
         ['Business Bank Account Details', 'businessBankAccountDetails', 'text'],
         ['Credit Score (CIBIL)', 'businessCreditScore', 'number'],
       ],
@@ -1876,159 +1881,167 @@ const scholarshipSections = [
   const currentSection = selectedSections[currentStep];
 
   const renderField = ([label, name, type, options]) => {
-    const lowerLabel = label.toLowerCase();
+  const lowerLabel = label.toLowerCase();
 
-    const isAmountField =
-      type === 'number' &&
-      (
-        lowerLabel.includes('income') ||
-        lowerLabel.includes('salary') ||
-        lowerLabel.includes('amount') ||
-        lowerLabel.includes('fees') ||
-        lowerLabel.includes('cost') ||
-        lowerLabel.includes('price') ||
-        lowerLabel.includes('emi') ||
-        lowerLabel.includes('turnover') ||
-        lowerLabel.includes('revenue') ||
-        lowerLabel.includes('profit') ||
-        lowerLabel.includes('value') ||
-        lowerLabel.includes('premium') ||
-        lowerLabel.includes('charges') ||
-        lowerLabel.includes('gst')
-      );
+  const isAmountField =
+    type === 'number' &&
+    (
+      lowerLabel.includes('income') ||
+      lowerLabel.includes('salary') ||
+      lowerLabel.includes('amount') ||
+      lowerLabel.includes('fees') ||
+      lowerLabel.includes('cost') ||
+      lowerLabel.includes('price') ||
+      lowerLabel.includes('emi') ||
+      lowerLabel.includes('turnover') ||
+      lowerLabel.includes('revenue') ||
+      lowerLabel.includes('profit') ||
+      lowerLabel.includes('value') ||
+      lowerLabel.includes('premium') ||
+      lowerLabel.includes('charges') ||
+      lowerLabel.includes('gst')
+    );
 
-    if (type === 'checkbox') {
-      return (
-        <label key={name} className="flex items-center gap-3 rounded-lg border border-theme-light bg-theme-bg px-4 py-3 text-sm font-medium text-theme-secondary">
-          <input
-            type="checkbox"
-            name={name}
-            checked={Boolean(formData[name])}
-            onChange={handleChange}
-            className="h-4 w-4"
-          />
-          {label}
-        </label>
-      );
-    }
-    if (type === 'file') {
-  return (
-    <div key={name}>
-      <label className="label">{label}</label>
-
+  if (type === 'checkbox') {
+    return (
       <label
-        htmlFor={name}
-<<<<<<< HEAD
-        className="group flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/60 px-4 py-6 text-center transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-md"
-=======
-        className="group flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-blue-300 bg-blue-50/50 px-3 py-3 transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-sm"
->>>>>>> origin/feature/admin-review
+        key={name}
+        className="flex items-center gap-3 rounded-lg border border-theme-light bg-theme-bg px-4 py-3 text-sm font-medium text-theme-primary"
       >
         <input
-          id={name}
-          type="file"
+          type="checkbox"
           name={name}
+          checked={Boolean(formData[name])}
           onChange={handleChange}
-          className="hidden"
+          className="h-4 w-4"
         />
-
-<<<<<<< HEAD
-        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-white text-2xl shadow-sm transition-all duration-300 group-hover:scale-110">
-          📤
-        </div>
-
-        <p className="text-sm font-semibold text-theme-primary">
-          {formData[name] ? 'File Selected' : 'Click to Upload'}
-        </p>
-
-        <p className="mt-1 text-xs text-theme-muted">
-          PDF, JPG, PNG allowed
-        </p>
-
-        {formData[name] && (
-          <div className="mt-3 rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
-            ✓ {formData[name]}
-          </div>
-=======
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-lg shadow-sm transition group-hover:scale-105">
-          📤
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-theme-primary">
-            {formData[name] ? formData[name] : 'Click to upload'}
-          </p>
-          <p className="text-xs text-theme-muted">
-            PDF, JPG, PNG allowed
-          </p>
-        </div>
-
-        {formData[name] && (
-          <span className="shrink-0 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
-            ✓
-          </span>
->>>>>>> origin/feature/admin-review
-        )}
+        {label}
       </label>
-    </div>
-  );
-}
+    );
+  }
 
+  if (type === 'file') {
     return (
-      <div key={name} className={type === 'textarea' ? 'md:col-span-2' : ''}>
-        <label className="label">
-          {label}
-          {isAmountField && <span className="text-theme-brand ml-1">(₹)</span>}
+      <div key={name}>
+        <label className="label">{label}</label>
+
+        <label
+          htmlFor={name}
+          className="group flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-blue-300 bg-blue-50/50 px-3 py-3 transition-all duration-300 hover:border-blue-500 hover:bg-blue-50 hover:shadow-sm"
+        >
+          <input
+            id={name}
+            type="file"
+            name={name}
+            onChange={handleChange}
+            className="hidden"
+          />
+
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white text-lg shadow-sm transition group-hover:scale-105">
+            📤
+          </div>
+
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-theme-primary">
+              {formData[name] ? formData[name] : 'Click to upload'}
+            </p>
+            <p className="text-xs text-theme-muted">
+              PDF, JPG, PNG allowed
+            </p>
+          </div>
+
+          {formData[name] && (
+            <span className="shrink-0 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+              ✓
+            </span>
+          )}
         </label>
-
-        {type === 'select' ? (
-          <select name={name} required={false} className="input-field" onChange={handleChange} value={formData[name] || ''}>
-            <option value="">Select Option</option>
-            {options.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        ) : type === 'textarea' ? (
-          <textarea name={name} required={false} className="input-field" rows="2" onChange={handleChange} value={formData[name] || ''} />
-        ) : (
-          <>
-            <input
-              type={type === 'number' ? 'text' : type}
-              inputMode={type === 'number' ? 'numeric' : undefined}
-              pattern={type === 'number' ? '[0-9]*' : undefined}
-              name={name}
-              required={false}
-              className="input-field"
-              onChange={handleChange}
-              value={type === 'file' ? undefined : formData[name] || ''}
-            />
-
-            
-          </>
-        )}
       </div>
     );
-  };
+  }
 
+  if (type === 'select') {
+    return (
+      <div key={name}>
+        <label className="label">{label}</label>
+        <select
+          name={name}
+          value={formData[name] || ''}
+          onChange={handleChange}
+          className="input-field"
+          required={false}
+        >
+          <option value="">Select Option</option>
+          {options?.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  }
+
+  if (type === 'textarea') {
+    return (
+      <div key={name} className="md:col-span-2">
+        <label className="label">{label}</label>
+        <textarea
+          name={name}
+          value={formData[name] || ''}
+          onChange={handleChange}
+          className="input-field min-h-[100px]"
+          required={false}
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div key={name}>
+      <label className="label">
+        {label} {isAmountField && <span className="text-blue-600">(₹)</span>}
+      </label>
+      <input
+        type={type === 'number' ? 'text' : type}
+        inputMode={type === 'number' ? 'numeric' : undefined}
+        pattern={type === 'number' ? '[0-9]*' : undefined}
+        name={name}
+        value={formData[name] || ''}
+        onChange={handleChange}
+        className="input-field"
+        required={false}
+      />
+    </div>
+  );
+};
   if (submitted) {
     return (
-      <div className="w-full max-w-2xl mx-auto">
-        <div className="card text-center">
-          <h2 className="text-2xl font-bold text-theme-primary mb-3">
+      <div className="max-w-3xl mx-auto px-4 py-8">
+        <div className="card text-center !border-t-2 !border-t-[#22C55E]">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-2xl">
+            ✓
+          </div>
+
+          <h2 className="text-2xl font-bold text-theme-primary mb-2">
             Application Submitted Successfully
           </h2>
+
           <p className="text-theme-muted mb-4">
             Your application has been submitted for review.
           </p>
-          <p className="font-semibold text-theme-brand mb-6">
-            Reference ID: FT{Date.now().toString().slice(-8)}
-          </p>
+
+          <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 mb-6">
+            <p className="text-sm text-theme-muted">Reference ID</p>
+            <p className="text-xl font-bold text-[#2563EB]">
+              FT{Date.now().toString().slice(-8)}
+            </p>
+          </div>
+
           <button
             type="button"
+            onClick={() => switchView('schemesView')}
             className="btn-primary"
-            onClick={() => openCategory(currentCategory.id)}
           >
             Back to Services
           </button>
@@ -2038,108 +2051,142 @@ const scholarshipSections = [
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <button onClick={() => openCategory(currentCategory.id)} className="btn-secondary mb-6 pl-3 group">
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <button
+        type="button"
+        onClick={() => {
+          if (currentCategory) {
+            openCategory(currentCategory);
+          } else {
+            switchView('schemesView');
+          }
+        }}
+        className="btn-secondary mb-6"
+      >
         Back
       </button>
 
       <div className="mb-8">
-        <span className="text-xs font-semibold text-theme-brand uppercase tracking-widest">
-          {currentCategory.name}
-        </span>
-        <h2 className="text-2xl font-bold text-theme-primary">{currentScheme.name}</h2>
-        <p className="text-theme-muted mt-2">Fill the required details below.</p>
-      </div>
+        <p className="section-kicker">
+          {currentCategory?.name || 'Service'}
+        </p>
 
-      <div className="mb-6">
-        <div className="flex justify-between text-sm font-medium mb-2">
-          <span>Application Progress</span>
-          <span>{progress}%</span>
-        </div>
+        <h1 className="text-3xl font-bold text-theme-primary">
+          {currentScheme?.name}
+        </h1>
 
-        <div className="w-full bg-gray-200 rounded-full h-3">
-          <div
-            className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-
-        <p className="text-sm text-theme-muted mt-2">
-          Page {currentStep + 1} of {selectedSections.length}
+        <p className="text-theme-muted mt-2">
+          Fill the required details below.
         </p>
       </div>
+
+      {selectedSections.length > 0 && (
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-semibold text-theme-primary">
+              Application Progress
+            </p>
+            <p className="font-semibold text-theme-primary">
+              {progress}%
+            </p>
+          </div>
+
+          <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-[#2563EB]"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          <p className="text-theme-muted mt-2">
+            Page {currentStep + 1} of {selectedSections.length}
+          </p>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {currentSection ? (
           <>
-          {currentSection?.title === 'Pension Projection' && isNps && (
-  <PensionCalculator type="nps" />
-)}
+            {(
+              isPersonalLoan ||
+              isHomeLoan ||
+              isCarLoan ||
+              isEducationLoan ||
+              isBusinessLoan
+            ) &&
+              (
+                currentSection?.title?.toLowerCase().includes('financial') ||
+                currentSection?.title?.toLowerCase().includes('income') ||
+                currentSection?.title?.toLowerCase().includes('eligibility')
+              ) && (
+                <EligibilityChecker />
+              )}
 
-{currentSection?.title === 'Pension Projection' && isApy && (
-  <PensionCalculator type="apy" />
-)}
+            {(
+              isPersonalLoan ||
+              isHomeLoan ||
+              isCarLoan ||
+              isEducationLoan ||
+              isBusinessLoan
+            ) &&
+              currentSection?.title?.toLowerCase().includes('loan') && (
+                <LoanCalculator />
+              )}
 
-{currentSection?.title === 'Pension Projection' && isPmSym && (
-  <PensionCalculator type="pmSym" />
-)}
+            {currentSection?.title === 'Pension Projection' && isNps && (
+              <PensionCalculator type="nps" />
+            )}
 
-{currentSection?.title === 'Pension Projection' && isSeniorCitizenPension && (
-  <PensionCalculator type="senior" />
-)}
-{(
-  isPersonalLoan ||
-  isHomeLoan ||
-  isCarLoan ||
-  isEducationLoan ||
-  isBusinessLoan
-) && currentSection?.title?.toLowerCase().includes('financial') && (
-  <EligibilityChecker />
-)}
+            {currentSection?.title === 'Pension Projection' && isApy && (
+              <PensionCalculator type="apy" />
+            )}
 
-{(
-  isPersonalLoan ||
-  isHomeLoan ||
-  isCarLoan ||
-  isEducationLoan ||
-  isBusinessLoan
-) && currentSection?.title?.toLowerCase().includes('loan') && (
-  <LoanCalculator />
-)}
+            {currentSection?.title === 'Pension Projection' && isPmSym && (
+              <PensionCalculator type="pmSym" />
+            )}
+
+            {currentSection?.title === 'Pension Projection' && isSeniorCitizenPension && (
+              <PensionCalculator type="senior" />
+            )}
+
             <div className="card !border-t-2 !border-t-[#2563EB]">
-              <h3 className="text-lg font-semibold text-theme-primary mb-4">
+              <h3 className="text-xl font-bold text-theme-primary mb-6">
                 {currentSection.title}
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {currentSection.fields.map(renderField)}
               </div>
-            </div>
 
-            <div className="flex gap-4">
-              {currentStep > 0 && (
-                <button
-                  type="button"
-                  className="btn-secondary flex-1 justify-center"
-                  onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 0))}
-                >
-                  Previous
-                </button>
-              )}
+              <div className="flex gap-4 mt-8">
+                {currentStep > 0 && (
+                  <button
+                    type="button"
+                    className="btn-secondary flex-1"
+                    onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 0))}
+                  >
+                    Previous
+                  </button>
+                )}
 
-              {currentStep < selectedSections.length - 1 ? (
-                <button
-                  type="button"
-                  className="btn-primary flex-1"
-                  onClick={() => setCurrentStep((prev) => Math.min(prev + 1, selectedSections.length - 1))}
-                >
-                  Next
-                </button>
-              ) : (
-                <button type="submit" className="btn-primary flex-1">
-                  Submit Application
-                </button>
-              )}
+                {currentStep < selectedSections.length - 1 ? (
+                  <button
+                    type="button"
+                    className="btn-primary flex-1"
+                    onClick={() =>
+                      setCurrentStep((prev) =>
+                        Math.min(prev + 1, selectedSections.length - 1)
+                      )
+                    }
+                  >
+                    Next
+                  </button>
+                ) : (
+                  <button type="submit" className="btn-primary flex-1">
+                    Submit Application
+                  </button>
+                )}
+              </div>
             </div>
           </>
         ) : (
