@@ -1,6 +1,17 @@
+import { useApp } from "../contexts/AppContext.jsx";
+
 export default function AssignedAgent() {
+  const { switchView } = useApp();
+
   return (
     <div className="w-full">
+      <button
+        onClick={() => switchView("contactView")}
+        className="btn-secondary mb-6 pl-3 group"
+      >
+        ← Back to Home
+      </button>
+
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="w-8 h-1 bg-theme-brand rounded-full" />
@@ -20,30 +31,18 @@ export default function AssignedAgent() {
 
       <div className="card space-y-4">
         <div>
-          <h3 className="font-semibold text-theme-primary">
-            Agent Name
-          </h3>
-          <p className="text-theme-muted">
-            Karthavya S
-          </p>
+          <h3 className="font-semibold text-theme-primary">Agent Name</h3>
+          <p className="text-theme-muted">Karthavya S</p>
         </div>
 
         <div>
-          <h3 className="font-semibold text-theme-primary">
-            Phone
-          </h3>
-          <p className="text-theme-muted">
-            +91 98765 43210
-          </p>
+          <h3 className="font-semibold text-theme-primary">Phone</h3>
+          <p className="text-theme-muted">+91 98765 43210</p>
         </div>
 
         <div>
-          <h3 className="font-semibold text-theme-primary">
-            Email
-          </h3>
-          <p className="text-theme-muted">
-            karthavya@fintech.com
-          </p>
+          <h3 className="font-semibold text-theme-primary">Email</h3>
+          <p className="text-theme-muted">karthavya@fintech.com</p>
         </div>
       </div>
     </div>

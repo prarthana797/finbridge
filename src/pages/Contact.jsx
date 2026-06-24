@@ -47,45 +47,46 @@ export default function Contact() {
           </p>
         </div>
 
-        <div
-          className="clickable-item"
-          onClick={contactAdmin}
-        >
+       <div
+  className="clickable-item"
+onClick={() => {
+  window.open(
+    "https://wa.me/918015338169?text=Hello%20Admin,%20I%20need%20assistance.",
+    "_blank"
+  );
+}}
+>
           <h3 className="font-semibold text-theme-primary">
             Chat with Admin
           </h3>
-          <p className="text-theme-muted text-sm mt-1">
-            Get instant assistance from the admin support team.
-          </p>
+         <p className="text-theme-muted text-sm mt-1">
+  Connect instantly with the admin via WhatsApp.
+</p>
         </div>
 
-        <div
-          className="clickable-item"
-          onClick={() => {
-            window.location.href = 'tel:+919876543210';
-          }}
-        >
-          <h3 className="font-semibold text-theme-primary">
-            Call Support
-          </h3>
-          <p className="text-theme-muted text-sm mt-1">
-            Speak with our customer support executives.
-          </p>
-        </div>
+       <div
+  className="clickable-item"
+  onClick={() => switchView("callSupportView")}
+>
+  <h3 className="font-semibold text-theme-primary">
+    Call Support
+  </h3>
+  <p className="text-theme-muted text-sm mt-1">
+    Speak with our customer support executives.
+  </p>
+</div>
 
-        <div
-          className="clickable-item"
-          onClick={() => {
-            window.location.href = 'mailto:support@fintech.com';
-          }}
-        >
-          <h3 className="font-semibold text-theme-primary">
-            Email Support
-          </h3>
-          <p className="text-theme-muted text-sm mt-1">
-            Send detailed queries and receive assistance by email.
-          </p>
-        </div>
+<div
+  className="clickable-item"
+  onClick={() => switchView("emailSupportView")}
+>
+  <h3 className="font-semibold text-theme-primary">
+    Email Support
+  </h3>
+  <p className="text-theme-muted text-sm mt-1">
+    Send detailed queries and receive assistance by email.
+  </p>
+</div>
       </div>
     </div>
   );

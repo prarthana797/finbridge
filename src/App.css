@@ -627,7 +627,6 @@ body { top: 0px !important; }
 @media (max-width: 360px) {
   .otp-digit { width: 40px; height: 48px; font-size: 20px !important; }
 }
-
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
@@ -663,4 +662,31 @@ body { top: 0px !important; }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+/* Remove arrows from number inputs */
+
+/* Chrome, Edge, Safari */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Remove number input arrows everywhere */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
 }
