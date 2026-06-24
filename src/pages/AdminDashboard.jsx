@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../contexts/AppContext.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import {
+  Landmark,
+  CreditCard,
+  Shield,
+  TrendingUp,
+  Building2
+} from "lucide-react";
 
 const STATUS_COLORS = {
   SUBMITTED: { bg: '#DBEAFE', text: '#1D4ED8' },
@@ -69,85 +76,95 @@ export default function AdminDashboard() {
   ];
 
   function renderOverview() {
-    return (
-      <>
-<div className="mt-6 mb-8">
-  <div
-  onClick={() => switchView('serviceReviewView')}
-  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
->
-  <div>
-    <h3 className="font-bold text-lg text-gray-800">
-      Savings Services
-    </h3>
-
-    <p className="text-sm text-gray-500">
-      Applications: 0
-    </p>
-  </div>
-</div>
-<div
-  onClick={() => switchView('serviceReviewView')}
-  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
->
-  <div>
-    <h3 className="font-bold text-lg text-gray-800">
-      Credit Services
-    </h3>
-
-    <p className="text-sm text-gray-500">
-      Applications: 0
-    </p>
-  </div>
-</div>
-<div
-  onClick={() => switchView('serviceReviewView')}
-  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
->
-  <div>
-    <h3 className="font-bold text-lg text-gray-800">
-      Insurance Services
-    </h3>
-
-    <p className="text-sm text-gray-500">
-      Applications: 0
-    </p>
-  </div>
-</div>
-<div
-  onClick={() => switchView('serviceReviewView')}
-  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
->
-  <div>
-    <h3 className="font-bold text-lg text-gray-800">
-      Pension Services
-    </h3>
-
-    <p className="text-sm text-gray-500">
-      Applications: 0
-    </p>
-  </div>
-</div>
-<div
-  onClick={() => switchView('serviceReviewView')}
-  className="bg-white border border-gray-200 rounded-2xl p-4 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer"
->
-  <div>
-    <h3 className="font-bold text-lg text-gray-800">
-      Social Security Services
-    </h3>
-
-    <p className="text-sm text-gray-500">
-      Applications: 0
-    </p>
-  </div>
-</div>
-</div>
-      </>
-    );
+  const services = [
+  {
+    title: "Savings Services",
+    icon: Landmark,
+    description: "Manage savings related applications and customer requests."
+  },
+  {
+    title: "Credit Services",
+    icon: CreditCard,
+    description: "Manage credit related applications and customer requests."
+  },
+  {
+    title: "Insurance Services",
+    icon: Shield,
+    description: "Manage insurance related applications and customer requests."
+  },
+  {
+    title: "Pension Services",
+    icon: TrendingUp,
+    description: "Manage pension related applications and customer requests."
+  },
+  {
+    title: "Social Security Services",
+    icon: Building2,
+    description: "Manage social security related applications and customer requests."
   }
+];
 
-  function renderApprovals() {
+  return (
+    <>
+      <div>
+        <div className="mb-8">
+          <p className="text-sm font-semibold text-blue-600 uppercase tracking-wider">
+            Service Management
+          </p>
+
+          <h2 className="text-3xl font-bold text-slate-900 mt-1">
+            Financial Services
+          </h2>
+
+          <div className="w-20 h-1 bg-blue-600 rounded-full mt-3"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {services.map((service, index) => {
+            const Icon = service.icon;
+
+            return (
+              <div
+                key={service.title}
+                style={{
+                  animationDelay: `${index * 150}ms`
+                }}
+                onClick={() => switchView("serviceReviewView")}
+                className="group bg-white rounded-2xl p-4 border border-slate-100 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer"
+              >
+                <div className="mb-4">
+                  <div>
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center animate-float">
+                      <Icon className="w-7 h-7 text-blue-600 transition-transform duration-300 group-hover:scale-110" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-slate-800">
+                      {service.title}
+                    </h3>
+
+                    <div className="inline-flex items-center px-3 py-1 mt-3 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold">
+                      0 Applications
+                    </div>
+
+                    <p className="mt-2 text-sm text-slate-500 leading-relaxed">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="border-t border-slate-100 pt-5">
+                  <span className="text-blue-600 font-semibold">
+                    Manage Requests →
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function renderApprovals() {
     const reviewApps = applications.filter(a => ['ADMIN_REVIEW', 'BANK_SELECTION', 'SENT_TO_BANK', 'UNDER_BANK_REVIEW'].includes(a.status));
     return (
       <>
@@ -337,35 +354,55 @@ export default function AdminDashboard() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-screen bg-slate-50">
       <div className="flex items-center justify-end mb-4">
         <div id="google_translate_element" />
       </div>
-      <div className="hero-welcome animate-fade-in mb-8">
-        <div className="relative z-10">
-          <div className="flex items-center justify-between mb-4">
-            <span className="hero-badge">
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              Admin Dashboard
-            </span>
-            <div className="flex items-center gap-2 text-blue-200/80 text-xs">
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-              Admin Portal
-            </div>
-          </div>
-<p className="text-blue-100 text-sm mb-1">
-  Welcome,
-</p>
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-blue-900 to-blue-600 min-h-[140px] p-6 md:p-7 shadow-xl border border-blue-800/20 mb-10 animate-fade-in animate-gradient">
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_40%)]" />
 
-<h1 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-  Admin - {currentUser?.name || 'Administrator'}
-</h1>
+  <div className="relative z-10">
+    <div className="flex items-start justify-between">
+      <div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white text-xs font-semibold border border-white/20">
+          Admin Dashboard
+        </span>
+
+        <h1 className="text-4xl font-bold text-white">
+          Good Morning,
+        </h1>
+
+        <h2 className="text-3xl font-semibold text-blue-100 mt-1">
+          {currentUser?.name || "Administrator"}
+        </h2>
+
+        <p className="mt-2 text-blue-200 text-sm">
+          Admin Dashboard Overview
+        </p>
+
+        <p className="mt-4 text-blue-100 max-w-2xl leading-relaxed">
+          Manage applications, review customer requests, monitor services,
+          and oversee financial operations from a centralized platform.
+        </p>
+      </div>
+
+      <div className="hidden lg:flex flex-col items-end">
+        <div className="text-right">
+          <p className="text-blue-200 text-xs uppercase tracking-wider">
+            System Status
+          </p>
+
+          <div className="flex items-center justify-end gap-2 mt-2">
+            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+            <span className="text-white font-medium">
+              Operational
+            </span>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
       {activeTab === 'overview' && renderOverview()}
       {activeTab === 'approvals' && renderApprovals()}

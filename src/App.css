@@ -301,7 +301,7 @@ select {
 /* ===== Fade In ===== */
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes scaleIn {
@@ -325,7 +325,9 @@ select {
 .hero-welcome {
   background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #3B82F6 100%);
   border-radius: 16px;
-  padding: 36px 40px;
+  padding: 20px 28px;
+  width: 85%;
+  margin: 0 auto 2rem auto;
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(37, 99, 235, 0.2);
@@ -625,6 +627,43 @@ body { top: 0px !important; }
 @media (max-width: 360px) {
   .otp-digit { width: 40px; height: 48px; font-size: 20px !important; }
 }
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientMove 10s ease infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
 /* Remove arrows from number inputs */
 
 /* Chrome, Edge, Safari */
@@ -639,8 +678,8 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
-/* Remove number input arrows everywhere */
 
+/* Remove number input arrows everywhere */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none !important;

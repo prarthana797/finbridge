@@ -67,11 +67,11 @@ export default function AgentDashboard() {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full px-4 md:px-6">
       <div className="flex items-center justify-end mb-4">
         <div id="google_translate_element" />
       </div>
-      <div className="hero-welcome animate-fade-in">
+      <div className="hero-welcome animate-fade-in mb-8 max-w-4xl mx-auto">
         <div className="relative z-10">
           <div className="flex items-center justify-between mb-4">
             <span className="hero-badge">
