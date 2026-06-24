@@ -26,10 +26,6 @@ export default function PensionCalculator({ type }) {
 
   const years = Math.max(retirementAge - currentAge, 0);
   const months = years * 12;
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/feature/admin-review
   const monthlyRate = expectedReturn / 100 / 12;
 
   const retirementCorpus =
@@ -72,11 +68,7 @@ export default function PensionCalculator({ type }) {
           <>
             <Input label="Current Age" name="currentAge" value={values.currentAge} onChange={updateValue} />
             <Input label="Retirement Age" name="retirementAge" value={values.retirementAge} onChange={updateValue} />
-<<<<<<< HEAD
             <Input label="Monthly Contribution (₹)" name="monthlyContribution" value={values.monthlyContribution} onChange={updateValue} />
-=======
-            <Input label="Monthly Contribution" name="monthlyContribution" value={values.monthlyContribution} onChange={updateValue} />
->>>>>>> origin/feature/admin-review
             <Input label="Expected Return (%)" name="expectedReturn" value={values.expectedReturn} onChange={updateValue} />
 
             <Result label="Retirement Corpus" value={retirementCorpus} />
@@ -88,24 +80,11 @@ export default function PensionCalculator({ type }) {
 
         {type === 'apy' && (
           <>
-<<<<<<< HEAD
             <Input label="Age" name="currentAge" value={values.currentAge} onChange={updateValue} />
 
             <div>
               <label className="label">Pension Amount</label>
               <select name="pensionAmount" className="input-field" value={values.pensionAmount} onChange={updateValue}>
-=======
-            <Input label="Current Age" name="currentAge" value={values.currentAge} onChange={updateValue} />
-
-            <div>
-              <label className="label">Desired Pension</label>
-              <select
-                name="pensionAmount"
-                value={values.pensionAmount}
-                onChange={updateValue}
-                className="input-field"
-              >
->>>>>>> origin/feature/admin-review
                 <option value="">Select Pension</option>
                 <option value="1000">₹1,000</option>
                 <option value="2000">₹2,000</option>
@@ -121,11 +100,7 @@ export default function PensionCalculator({ type }) {
 
         {type === 'pmSym' && (
           <>
-<<<<<<< HEAD
             <Input label="Age" name="currentAge" value={values.currentAge} onChange={updateValue} />
-=======
-            <Input label="Current Age" name="currentAge" value={values.currentAge} onChange={updateValue} />
->>>>>>> origin/feature/admin-review
             <Result label="Monthly Contribution" value={pmSymContribution} />
             <Result label="Government Contribution" value={pmSymContribution} />
           </>
@@ -133,11 +108,7 @@ export default function PensionCalculator({ type }) {
 
         {type === 'senior' && (
           <>
-<<<<<<< HEAD
             <Input label="Investment Amount (₹)" name="investmentAmount" value={values.investmentAmount} onChange={updateValue} />
-=======
-            <Input label="Investment Amount" name="investmentAmount" value={values.investmentAmount} onChange={updateValue} />
->>>>>>> origin/feature/admin-review
             <Result label="Monthly Pension" value={seniorMonthlyPension} />
             <Result label="Annual Pension" value={seniorAnnualPension} />
           </>
@@ -154,10 +125,7 @@ function Input({ label, name, value, onChange }) {
       <input
         type="text"
         inputMode="numeric"
-<<<<<<< HEAD
         pattern="[0-9]*"
-=======
->>>>>>> origin/feature/admin-review
         name={name}
         value={value}
         onChange={onChange}
